@@ -1,0 +1,138 @@
+---
+variables:
+  DOCKER_BUILDKIT: 1
+  DOCKER_TLS_CERTDIR: "/certs"
+  BASH_ENV: /root/.bashrc
+  ANSIBLE_COLLECTIONS_PATH: $CI_BUILDS_DIR/ansible/collections
+  REGISTRY_PROXY_URL: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/
+  GIT_CLONE_PATH: $ANSIBLE_COLLECTIONS_PATH/ansible_collections/$CI_PROJECT_NAMESPACE/minio
+  XDG_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
+  PIP_CACHE_DIR: "$XDG_CACHE_DIR/pip"
+  PY_COLORS: '1'
+  ANSIBLE_FORCE_COLOR: '1'
+
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+
+lint:
+  stage: lint
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:3.10
+  cache:
+    paths:
+      - .cache/pip/
+  before_script:
+    - python -m pip install ansible-lint
+  script:
+    - ansible-lint
+  only:
+    refs:
+      - merge_requests
+      - main
+
+.ansible:
+  stage: test
+  cache:
+    paths:
+      - .cache/pip/
+  parallel:
+    matrix:
+      - PYTHON_VERSION: '3.8'
+        ANSIBLE_VERSION:
+          - 'stable-2.13'
+      - PYTHON_VERSION: '3.9'
+        ANSIBLE_VERSION:
+          - 'stable-2.13'
+          - 'stable-2.14'
+          - 'stable-2.15'
+      - PYTHON_VERSION: '3.10'
+        ANSIBLE_VERSION:
+          - 'stable-2.13'
+          - 'stable-2.14'
+          - 'stable-2.15'
+          - 'stable-2.16'
+          - 'devel'
+          - 'milestone'
+      - PYTHON_VERSION: '3.11'
+        ANSIBLE_VERSION:
+          - 'stable-2.14'
+          - 'stable-2.15'
+          - 'stable-2.16'
+          - 'devel'
+          - 'milestone'
+      - PYTHON_VERSION: '3.12'
+        ANSIBLE_VERSION:
+          - 'stable-2.16'
+          - 'devel'
+          - 'milestone'
+
+sanity:
+  extends: .ansible
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
+  before_script:
+    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
+    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
+  script:
+    - ansible-test sanity --local --requirements --junit
+  artifacts:
+    when: always
+    reports:
+      junit: tests/output/**/*.xml
+  only:
+    refs:
+      - merge_requests
+      - main
+
+integration:
+  extends: .ansible
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}-docker
+  services:
+    - name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7-dind
+      alias: docker
+  before_script:
+    - docker login -u $CI_DEPENDENCY_PROXY_USER -p $CI_DEPENDENCY_PROXY_PASSWORD $CI_DEPENDENCY_PROXY_SERVER
+    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
+    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
+    - python -m pip install -r requirements-test.txt
+    - cd extensions
+  script:
+    - molecule test
+  only:
+    refs:
+      - merge_requests
+      - main
+
+build:
+  stage: build
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:3.10
+  cache:
+    paths:
+      - .cache/pip/
+  before_script:
+    - python -m pip install ansible-core
+  script:
+    - ansible-galaxy collection build
+  artifacts:
+    paths:
+      - "${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_REF_NAME}.tar.gz"
+  only:
+    refs:
+      - tags
+
+deploy:
+  stage: deploy
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:3.10
+  cache:
+    paths:
+      - .cache/pip/
+  dependencies:
+    - build
+  before_script:
+    - python -m pip install ansible-core
+  script:
+    - ansible-galaxy collection publish --token "$GALAXY_API_TOKEN" "./${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_REF_NAME}.tar.gz"
+  only:
+    refs:
+      - tags

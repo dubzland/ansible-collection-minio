@@ -1,0 +1,9 @@
+---
+
+- name: Ensure the Minio Client binary is present
+  ansible.builtin.get_url:
+    url: "{{ minio_client_binary_url }}"
+    dest: "{{ minio_client_binary_path }}"
+    owner: root
+    group: root
+    mode: '0755'

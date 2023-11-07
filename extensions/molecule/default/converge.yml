@@ -1,0 +1,10 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Install Server
+      ansible.builtin.include_role:
+        name: dubzland.minio.minio_server
+    - name: Install Client
+      ansible.builtin.include_role:
+        name: dubzland.minio.minio_client

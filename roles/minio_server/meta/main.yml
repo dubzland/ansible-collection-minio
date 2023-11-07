@@ -1,0 +1,24 @@
+---
+galaxy_info:
+  role_name: minio_server
+  author: dubzland
+  description: Installs and configures the Minio storage server.
+  license: MIT
+  min_ansible_version: '2.14'
+
+  platforms:
+    - name: Debian
+      versions:
+        - bookworm
+        - bullseye
+    - name: Ubuntu
+      versions:
+        - jammy
+        - focal
+  galaxy_tags:
+    - minio
+    - linux
+    - debian
+    - ubuntu
+
+dependencies: []

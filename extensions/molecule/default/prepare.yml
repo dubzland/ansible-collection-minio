@@ -1,0 +1,9 @@
+---
+- name: Ensure package cache is up-to-date
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Update apt repository
+      ansible.builtin.apt:
+        update_cache: true
+      when: ansible_os_family == 'Debian'

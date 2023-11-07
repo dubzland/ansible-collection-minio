@@ -1,0 +1,40 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: "molecule-minio-bookworm"
+    image: "${REGISTRY_PROXY_URL}jdubz/ci-systemd:1.0-bookworm"
+    privileged: true
+    pre_build_image: true
+    override_command: false
+    cgroupns_mode: host
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  - name: "molecule-minio-bullseye"
+    image: "${REGISTRY_PROXY_URL}jdubz/ci-systemd:1.0-bullseye"
+    privileged: true
+    pre_build_image: true
+    override_command: false
+    cgroupns_mode: host
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  - name: "molecule-minio-jammy"
+    image: "${REGISTRY_PROXY_URL}jdubz/ci-systemd:1.0-jammy"
+    privileged: true
+    pre_build_image: true
+    override_command: false
+    cgroupns_mode: host
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  - name: "molecule-minio-focal"
+    image: "${REGISTRY_PROXY_URL}jdubz/ci-systemd:1.0-focal"
+    privileged: true
+    pre_build_image: true
+    override_command: false
+    cgroupns_mode: host
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+provisioner:
+  name: ansible

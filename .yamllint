@@ -1,0 +1,7 @@
+---
+extends: default
+ignore: |
+  .gitlab-ci.yml
+  .tox/
+  .venv/
+  molecule/

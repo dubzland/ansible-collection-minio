@@ -1,0 +1,33 @@
+---
+argument_specs:
+  main:
+    short_description: The main entrypoint for minio.minio_server
+    options:
+      minio_server_system_group:
+        type: str
+        required: true
+        description: Service group for the Minio service
+      minio_server_system_user:
+        type: str
+        required: true
+        description: Service user for the Minio service
+      minio_server_binary_url:
+        type: str
+        required: true
+        description: URL used to download the Minio server binary
+      minio_server_binary_path:
+        type: path
+        required: true
+        description: Local filename for the Minio server binary
+      minio_server_storage_dir:
+        type: path
+        required: true
+        description: Local directory to contain all Minio server blobs
+      minio_server_admin_username:
+        type: str
+        required: true
+        description: Account used to access the Web GUI and cli
+      minio_server_admin_password:
+        type: str
+        required: true
+        description: Password associated with the `admin_username`

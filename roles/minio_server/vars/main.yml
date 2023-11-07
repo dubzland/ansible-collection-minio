@@ -1,0 +1,6 @@
+---
+minio_server_system_group: minio
+minio_server_system_user: minio
+minio_server_binary_url:
+  https://dl.min.io/server/minio/release/linux-amd64/minio
+minio_server_binary_path: /usr/local/bin/minio
