@@ -2,6 +2,8 @@
 argument_specs:
   main:
     short_description: The main entrypoint for minio.minio_server
+    description:
+      - The main entrypoint for minio.minio_server
     options:
       minio_server_system_group:
         type: str

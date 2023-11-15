@@ -85,6 +85,19 @@ sanity:
       - merge_requests
       - main
 
+unit:
+  extends: .ansible
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
+  before_script:
+    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
+    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
+  script:
+    - ansible-test units --local --requirements
+  only:
+    refs:
+      - merge_requests
+      - main
+
 integration:
   extends: .ansible
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}-docker
