@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.1] - 2023-11-15
+
 ### Added
 
 - Minio Client and Server role
+
+[0.0.1]: https://git.dubzland.net/dubzland/ansible-collection-minio/-/tree/0.0.1
