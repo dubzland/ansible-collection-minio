@@ -27,13 +27,19 @@ Name | Description
 [dubzland.minio.minio_client](https://git.dubzland.net/dubzland/ansible-collection-minio/blob/main/roles/minio_client)|Install and configure the Minio client (mc)
 
 ### Modules
+### Modules
 Name | Description
 --- | ---
 [dubzland.minio.minio_alias](https://git.dubzland.net/dubzland/ansible-collection-minio/blob/main/docs/dubzland.minio.minio_alias_module.rst)|Manages Minio aliases
 
-## License
 
-MIT
+## Licensing
+
+This collection is primarily licensed and distributed as a whole under the GNU General Public License v3.0 or later.
+
+See [LICENSE](https://git.dubzland.net/dubzland/ansible-collection-minio/blob/main/LICENSE) for the full text.
+
+All files have a machine readable `SDPX-License-Identifier:` comment denoting its respective license(s) or an equivalent entry in an accompanying `.license` file. Only changelog fragments (which will not be part of a release) are covered by a blanket statement in `.reuse/dep5`. This conforms to the [REUSE specification](https://reuse.software/spec/).
 
 ## Author
 
