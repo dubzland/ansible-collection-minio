@@ -25,7 +25,7 @@ from ansible_collections.dubzland.minio.tests.unit.plugins.modules.utils import 
 
 @pytest.fixture()
 def mock_alias_record(
-    name="local",
+    name="testing",
     url="http://localhost:9001",
     access_key="test",
     secret_key="supersekret",
@@ -45,19 +45,19 @@ def mock_alias_record(
 
 def test_alias_find_runs_command(mock_module):
     with mock_run_command(mock_module, "", "", 0) as run_command:
-        minio_alias.alias_find(mock_module, "local")
+        minio_alias.alias_find(mock_module, "testing")
 
     run_command.assert_called_with(["/mock/bin/testing", "--json", "alias", "list"])
 
 
 def test_alias_find_returns_none(mock_module):
     with mock_run_command(mock_module, "", "", 0):
-        assert minio_alias.alias_find(mock_module, "local") is None
+        assert minio_alias.alias_find(mock_module, "testing") is None
 
 
 def test_alias_find_returns_alias(mock_module, mock_alias_record):
     with mock_run_command(mock_module, json.dumps(mock_alias_record), "", 0):
-        res = minio_alias.alias_find(mock_module, "local")
+        res = minio_alias.alias_find(mock_module, "testing")
 
         assert res["name"] == mock_alias_record["alias"]
         assert res["url"] == mock_alias_record["URL"]
@@ -69,7 +69,7 @@ def test_alias_create_or_update_when_not_exist(mock_module, mock_alias_record):
     with mock_run_command(mock_module, "", "", 0) as run_command:
         minio_alias.alias_create_or_update(
             mock_module,
-            "local",
+            "testing",
             mock_alias_record["URL"],
             mock_alias_record["accessKey"],
             mock_alias_record["secretKey"],
@@ -81,7 +81,7 @@ def test_alias_create_or_update_when_not_exist(mock_module, mock_alias_record):
             "--json",
             "alias",
             "set",
-            "local",
+            "testing",
             mock_alias_record["URL"],
             mock_alias_record["accessKey"],
             mock_alias_record["secretKey"],
@@ -93,7 +93,7 @@ def test_alias_create_or_update_when_exists(mock_module, mock_alias_record):
     with mock_run_command(mock_module, mock_alias_record, "", 0) as run_command:
         minio_alias.alias_create_or_update(
             mock_module,
-            "local",
+            "testing",
             mock_alias_record["URL"],
             mock_alias_record["accessKey"],
             "newsekretkey",
@@ -105,7 +105,7 @@ def test_alias_create_or_update_when_exists(mock_module, mock_alias_record):
             "--json",
             "alias",
             "set",
-            "local",
+            "testing",
             mock_alias_record["URL"],
             mock_alias_record["accessKey"],
             "newsekretkey",
@@ -115,10 +115,10 @@ def test_alias_create_or_update_when_exists(mock_module, mock_alias_record):
 
 def test_alias_delete(mock_module):
     with mock_run_command(mock_module, "", "", 0) as run_command:
-        minio_alias.alias_delete(mock_module, "local")
+        minio_alias.alias_delete(mock_module, "testing")
 
     run_command.assert_called_with(
-        ["/mock/bin/testing", "--json", "alias", "remove", "local"]
+        ["/mock/bin/testing", "--json", "alias", "remove", "testing"]
     )
 
 
@@ -146,7 +146,7 @@ class TestMinioAlias(ModuleTestCase):
 
     def test_module_unchanged_when_exists(self):
         record = {
-            "name": "local",
+            "name": "testing",
             "url": "http://localhost:9000",
             "access_key": "test",
             "secret_key": "supersekret",
@@ -164,7 +164,7 @@ class TestMinioAlias(ModuleTestCase):
 
     def test_module_update_when_exists(self):
         record = {
-            "name": "local",
+            "name": "testing",
             "url": "http://localhost:9000",
             "access_key": "test",
             "secret_key": "supersekret",
@@ -184,7 +184,7 @@ class TestMinioAlias(ModuleTestCase):
 
         self.alias_create_or_update_mock.assert_called_with(
             ANY,
-            "local",
+            "testing",
             args["url"],
             args["access_key"],
             args["secret_key"],
@@ -192,7 +192,7 @@ class TestMinioAlias(ModuleTestCase):
 
     def test_module_create_when_not_exist(self):
         record = {
-            "name": "local",
+            "name": "testing",
             "url": "http://localhost:9000",
             "access_key": "test",
             "secret_key": "supersekret",
@@ -209,13 +209,13 @@ class TestMinioAlias(ModuleTestCase):
         assert result["changed"] is True
 
         self.alias_create_or_update_mock.assert_called_with(
-            ANY, "local", record["url"], record["access_key"], record["secret_key"]
+            ANY, "testing", record["url"], record["access_key"], record["secret_key"]
         )
 
     def test_module_unchanged_when_not_exist_and_state_absent(self):
         set_module_args(
             {
-                "name": "local",
+                "name": "testing",
                 "url": "http://localhost:9000",
                 "access_key": "test",
                 "secret_key": "supersekret",
@@ -235,7 +235,7 @@ class TestMinioAlias(ModuleTestCase):
 
     def test_module_changed_when_exists_and_state_absent(self):
         record = {
-            "name": "local",
+            "name": "testing",
             "url": "http://localhost:9000",
             "access_key": "test",
             "secret_key": "supersekret",
