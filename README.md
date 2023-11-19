@@ -23,14 +23,13 @@ Also tested against the current development version of `ansible-core`.
 ### Roles
 Name | Description
 --- | ---
-[dubzland.minio.minio_server](https://git.dubzland.net/dubzland/ansible-collection-minio/blob/main/roles/minio_server)|Install and configure a Minio server
-[dubzland.minio.minio_client](https://git.dubzland.net/dubzland/ansible-collection-minio/blob/main/roles/minio_client)|Install and configure the Minio client (mc)
+`dubzland.minio.minio_server`|Install and configure a Minio server
+`dubzland.minio.minio_client`|Install and configure the Minio client (mc)
 
-### Modules
 ### Modules
 Name | Description
 --- | ---
-[dubzland.minio.minio_alias](https://git.dubzland.net/dubzland/ansible-collection-minio/blob/main/docs/dubzland.minio.minio_alias_module.rst)|Manages Minio aliases
+`dubzland.minio.minio_alias`|Manages Minio aliases
 
 
 ## Licensing
