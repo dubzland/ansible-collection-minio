@@ -93,6 +93,10 @@ unit:
     - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
   script:
     - ansible-test units --local --requirements
+  artifacts:
+    when: always
+    reports:
+      junit: tests/output/**/*.xml
   only:
     refs:
       - merge_requests
