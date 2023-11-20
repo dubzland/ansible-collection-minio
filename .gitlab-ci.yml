@@ -77,7 +77,7 @@ unit:
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
   before_script:
     - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
-    - python -m pip install https://github.com/ansible/ansible/archive/devel.tar.gz
+    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
     - python -m pip install -r requirements-test.txt
   script:
     - ansible-test coverage xml --stub --color -v
@@ -118,10 +118,10 @@ coverage:
     - unit
   before_script:
     - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
-    - python -m pip install https://github.com/ansible/ansible/archive/.tar.gz
-    - python -m pip install -r requirements-test.txt
+    - python -m pip install https://github.com/ansible/ansible/archive/devel.tar.gz
+    - python -m pip install coverage==7.3.2
   script:
-    - ansible-test units --local --requirements --coverage
+    - ansible-test coverage xml --stub --color -v
   artifacts:
     when: always
     reports:
