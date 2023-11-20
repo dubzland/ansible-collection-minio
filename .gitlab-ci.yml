@@ -70,6 +70,7 @@ sanity:
     refs:
       - merge_requests
       - main
+      - tags
 
 unit:
   extends: .ansible
@@ -90,6 +91,7 @@ unit:
     refs:
       - merge_requests
       - main
+      - tags
 
 integration:
   extends: .ansible
@@ -110,6 +112,7 @@ integration:
     refs:
       - merge_requests
       - main
+      - tags
 
 coverage:
   stage: coverage
@@ -133,6 +136,7 @@ coverage:
     refs:
       - merge_requests
       - main
+      - tags
 
 build:
   stage: build
