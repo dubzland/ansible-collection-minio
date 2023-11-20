@@ -38,8 +38,6 @@ This collection is primarily licensed and distributed as a whole under the GNU G
 
 See [LICENSE](https://git.dubzland.net/dubzland/ansible-collection-minio/blob/main/LICENSE) for the full text.
 
-All files have a machine readable `SDPX-License-Identifier:` comment denoting its respective license(s) or an equivalent entry in an accompanying `.license` file. Only changelog fragments (which will not be part of a release) are covered by a blanket statement in `.reuse/dep5`. This conforms to the [REUSE specification](https://reuse.software/spec/).
-
 ## Author
 
 * [Josh Williams](https://codingprime.com)

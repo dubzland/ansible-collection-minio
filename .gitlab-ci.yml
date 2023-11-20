@@ -91,12 +91,16 @@ unit:
   before_script:
     - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
     - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
+    - python -m pip install -r requirements-test.txt
   script:
-    - ansible-test units --local --requirements
+    - ansible-test units --local --requirements --coverage
   artifacts:
     when: always
     reports:
       junit: tests/output/**/*.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: tests/output/reports/coverage.xml
   only:
     refs:
       - merge_requests

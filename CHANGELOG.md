@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ansible module `minio_alias` for managing `mc` aliases (#1)
 
+### Changed
+
+- Refactored testing to fall more in line with a standard collection.
+
 ## [0.0.1] - 2023-11-15
 
 ### Added
