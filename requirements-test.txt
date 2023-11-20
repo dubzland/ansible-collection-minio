@@ -1,5 +1,3 @@
-coverage==6.5.0
-
 molecule >= 6.0.2; python_version >= "3.9"
 molecule-plugins[docker] >= 23.5.0; python_version >= "3.9"
 

@@ -80,7 +80,7 @@ unit:
     - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
     - python -m pip install -r requirements-test.txt
   script:
-    - ansible-test coverage xml --stub --color -v
+    - ansible-test units --local --requirements --coverage
   artifacts:
     when: always
     untracked: true
@@ -113,15 +113,14 @@ integration:
 
 coverage:
   stage: coverage
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:10
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:3.12
   dependencies:
     - unit
   before_script:
     - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
     - python -m pip install https://github.com/ansible/ansible/archive/devel.tar.gz
-    - python -m pip install coverage==7.3.2
   script:
-    - ansible-test coverage xml --stub --color -v
+    - ansible-test coverage xml --requirements --stub --color -v
   artifacts:
     when: always
     reports:
