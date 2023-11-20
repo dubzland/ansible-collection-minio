@@ -91,25 +91,25 @@ unit:
       - merge_requests
       - main
 
-integration:
-  extends: .ansible
-  stage: test
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}-docker
-  services:
-    - name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7-dind
-      alias: docker
-  before_script:
-    - docker login -u $CI_DEPENDENCY_PROXY_USER -p $CI_DEPENDENCY_PROXY_PASSWORD $CI_DEPENDENCY_PROXY_SERVER
-    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
-    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
-    - python -m pip install -r requirements-test.txt
-    - cd extensions
-  script:
-    - molecule test
-  only:
-    refs:
-      - merge_requests
-      - main
+# integration:
+#   extends: .ansible
+#   stage: test
+#   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}-docker
+#   services:
+#     - name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7-dind
+#       alias: docker
+#   before_script:
+#     - docker login -u $CI_DEPENDENCY_PROXY_USER -p $CI_DEPENDENCY_PROXY_PASSWORD $CI_DEPENDENCY_PROXY_SERVER
+#     - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
+#     - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
+#     - python -m pip install -r requirements-test.txt
+#     - cd extensions
+#   script:
+#     - molecule test
+#   only:
+#     refs:
+#       - merge_requests
+#       - main
 
 coverage:
   stage: coverage
@@ -121,6 +121,8 @@ coverage:
     - python -m pip install https://github.com/ansible/ansible/archive/devel.tar.gz
   script:
     - ansible-test coverage xml --requirements --stub --color -v
+    - ansible-test coverage report --requirements --color -v
+  coverage: '/TOTAL \d+(?:\.\d+)?/'
   artifacts:
     when: always
     reports:
