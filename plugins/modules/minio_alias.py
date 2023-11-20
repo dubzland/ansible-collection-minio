@@ -53,7 +53,7 @@ options:
 EXAMPLES = """
 - name: Add alias for Minio server
   dubzland.minio.minio_alias:
-    name: local
+    name: localhost
     url: http://localhost:9000
     access_key: myuser
     secret_key: supersekret
