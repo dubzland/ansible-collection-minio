@@ -24,14 +24,14 @@ stages:
       - .cache/pip/
   parallel:
     matrix:
-      # - PYTHON_VERSION: '3.8'
-      #   ANSIBLE_VERSION:
-      #     - 'stable-2.13'
-      # - PYTHON_VERSION: '3.9'
-      #   ANSIBLE_VERSION:
-      #     - 'stable-2.13'
-      #     - 'stable-2.14'
-      #     - 'stable-2.15'
+      - PYTHON_VERSION: '3.8'
+        ANSIBLE_VERSION:
+          - 'stable-2.13'
+      - PYTHON_VERSION: '3.9'
+        ANSIBLE_VERSION:
+          - 'stable-2.13'
+          - 'stable-2.14'
+          - 'stable-2.15'
       - PYTHON_VERSION: '3.10'
         ANSIBLE_VERSION:
           - 'stable-2.13'
@@ -40,36 +40,36 @@ stages:
           - 'stable-2.16'
           - 'devel'
           - 'milestone'
-      # - PYTHON_VERSION: '3.11'
-      #   ANSIBLE_VERSION:
-      #     - 'stable-2.14'
-      #     - 'stable-2.15'
-      #     - 'stable-2.16'
-      #     - 'devel'
-      #     - 'milestone'
-      # - PYTHON_VERSION: '3.12'
-      #   ANSIBLE_VERSION:
-      #     - 'stable-2.16'
-      #     - 'devel'
-      #     - 'milestone'
+      - PYTHON_VERSION: '3.11'
+        ANSIBLE_VERSION:
+          - 'stable-2.14'
+          - 'stable-2.15'
+          - 'stable-2.16'
+          - 'devel'
+          - 'milestone'
+      - PYTHON_VERSION: '3.12'
+        ANSIBLE_VERSION:
+          - 'stable-2.16'
+          - 'devel'
+          - 'milestone'
 
-# sanity:
-#   extends: .ansible
-#   stage: lint
-#   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
-#   before_script:
-#     - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
-#     - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
-#   script:
-#     - ansible-test sanity --local --requirements --junit
-#   artifacts:
-#     when: always
-#     reports:
-#       junit: tests/output/**/*.xml
-#   only:
-#     refs:
-#       - merge_requests
-#       - main
+sanity:
+  extends: .ansible
+  stage: lint
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
+  before_script:
+    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
+    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
+  script:
+    - ansible-test sanity --local --requirements --junit
+  artifacts:
+    when: always
+    reports:
+      junit: tests/output/**/*.xml
+  only:
+    refs:
+      - merge_requests
+      - main
 
 unit:
   extends: .ansible
@@ -78,7 +78,6 @@ unit:
   before_script:
     - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
     - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
-    - python -m pip install -r requirements-test.txt
   script:
     - ansible-test units --local --requirements --coverage
   artifacts:
@@ -91,25 +90,25 @@ unit:
       - merge_requests
       - main
 
-# integration:
-#   extends: .ansible
-#   stage: test
-#   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}-docker
-#   services:
-#     - name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7-dind
-#       alias: docker
-#   before_script:
-#     - docker login -u $CI_DEPENDENCY_PROXY_USER -p $CI_DEPENDENCY_PROXY_PASSWORD $CI_DEPENDENCY_PROXY_SERVER
-#     - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
-#     - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
-#     - python -m pip install -r requirements-test.txt
-#     - cd extensions
-#   script:
-#     - molecule test
-#   only:
-#     refs:
-#       - merge_requests
-#       - main
+integration:
+  extends: .ansible
+  stage: test
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}-docker
+  services:
+    - name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7-dind
+      alias: docker
+  before_script:
+    - docker login -u $CI_DEPENDENCY_PROXY_USER -p $CI_DEPENDENCY_PROXY_PASSWORD $CI_DEPENDENCY_PROXY_SERVER
+    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
+    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
+    - python -m pip install -r requirements-test.txt
+    - cd extensions
+  script:
+    - molecule test
+  only:
+    refs:
+      - merge_requests
+      - main
 
 coverage:
   stage: coverage
