@@ -12,10 +12,16 @@ __metaclass__ = type
 DOCUMENTATION = """
 ---
 module: minio_alias
-short_description: Manages Minio aliases
+short_description: Manages Minio Client (mc) aliases
 description:
-  - Manages Minio Client (mc) aliases
-author: "Josh Williams (@t3hpr1m3)"
+  - When the alias does not exist, it will be created.
+  - When the alias does exists and O(state=absent), the alias will be deleted.
+  - When changes are made to the alias, the alias will be updated.
+author:
+    - Josh Williams (@t3hpr1m3)
+requirements:
+  - python >= 3.8
+  - Minio client binary (mc)
 attributes:
   check_mode:
     support: full
@@ -27,19 +33,19 @@ options:
   name:
     type: str
     required: true
-    description: Name of the alias to be managed
+    description: Name of the alias to be managed.
   url:
     type: str
     required: true
-    description: Url of the Minio server to associate with this alias
+    description: Url of the Minio server to associate with this alias.
   access_key:
     type: str
     required: true
-    description: Minio access key use to connect to the instance
+    description: Minio access key use to connect to the instance.
   secret_key:
     type: str
     required: true
-    description: Minio secret key use to connect to the instance
+    description: Minio secret key use to connect to the instance.
   state:
     description:
       - Indicates the desired alias state.
@@ -48,6 +54,10 @@ options:
     default: present
     choices: [ "present", "absent" ]
     type: str
+seealso:
+  - name: mc alias
+    description: Documentation for the B(mc alias) command.
+    link: https://min.io/docs/minio/linux/reference/minio-mc/mc-alias.html
 """
 
 EXAMPLES = """

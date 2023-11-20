@@ -1,0 +1,17 @@
+---
+argument_specs:
+  main:
+    short_description: Installs the L(Minio,https://min.io) client.
+    description:
+      - Downloads the Minio client binary (B(mc)).
+    options:
+      minio_client_binary_path:
+        type: path
+        required: false
+        description: Local filename for the Minio client binary.
+        default: /usr/local/bin/mc
+      minio_client_binary_url:
+        type: str
+        required: false
+        description: URL used to download the Minio client binary.
+        default: https://dl.min.io/client/mc/release/linux-amd64/mc

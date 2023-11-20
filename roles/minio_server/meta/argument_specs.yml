@@ -1,35 +1,47 @@
 ---
 argument_specs:
   main:
-    short_description: The main entrypoint for minio.minio_server
+    short_description:
+      Installs and configures the L(Minio,https://min.io) server.
     description:
-      - The main entrypoint for minio.minio_server
+      - Downloads the Minio server binary (B(mclient)).
+      - Creates a system user and group for running the B(minio) service.
+      - Adds a systemd unit for managing the B(minio) service.
+      - Creates a minimal B(minio) configuration.
+      - Initializes the B(minio) installation with an administrative user.
     options:
       minio_server_system_group:
         type: str
-        required: true
-        description: Service group for the Minio service
+        required: false
+        description: Service group for the Minio service.
+        default: minio
       minio_server_system_user:
         type: str
-        required: true
-        description: Service user for the Minio service
+        required: false
+        description: Service user for the Minio service.
+        default: minio
       minio_server_binary_url:
         type: str
-        required: true
-        description: URL used to download the Minio server binary
+        required: false
+        description: URL used to download the Minio server binary.
+        default: https://dl.min.io/server/minio/release/linux-amd64/minio
       minio_server_binary_path:
         type: path
-        required: true
-        description: Local filename for the Minio server binary
+        required: false
+        description: Local filename for the Minio server binary.
+        default: /usr/local/bin/minio
       minio_server_storage_dir:
         type: path
-        required: true
-        description: Local directory to contain all Minio server blobs
+        required: false
+        description: Local directory to contain all Minio server blobs.
+        default: /srv/minio
       minio_server_admin_username:
         type: str
-        required: true
-        description: Account used to access the Web GUI and cli
+        required: false
+        description: Account used to access the Web GUI and cli.
+        default: minioadmin
       minio_server_admin_password:
         type: str
-        required: true
-        description: Password associated with the `admin_username`
+        required: false
+        description: Password associated with O(minio_server_admin_username).
+        default: minioadmin
