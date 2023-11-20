@@ -1,10 +1,5 @@
 ---
 repos:
-  - repo: https://github.com/ansible-network/collection_prep
-    rev: 1.1.1
-    hooks:
-      - id: update-docs
-
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
@@ -15,3 +10,11 @@ repos:
       - id: no-commit-to-branch
         args: [--branch, main]
       - id: trailing-whitespace
+  - repo: https://github.com/psf/black
+    rev: 23.7.0
+    hooks:
+      - id: black
+  - repo: https://github.com/ansible/ansible-lint
+    rev: v6.22.0
+    hooks:
+      - id: ansible-lint

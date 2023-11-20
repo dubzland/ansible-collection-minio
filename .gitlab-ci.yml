@@ -14,26 +14,11 @@ variables:
 stages:
   - lint
   - test
+  - coverage
   - build
   - deploy
 
-lint:
-  stage: lint
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:3.10
-  cache:
-    paths:
-      - .cache/pip/
-  before_script:
-    - python -m pip install ansible-lint
-  script:
-    - ansible-lint
-  only:
-    refs:
-      - merge_requests
-      - main
-
 .ansible:
-  stage: test
   cache:
     paths:
       - .cache/pip/
@@ -70,6 +55,7 @@ lint:
 
 sanity:
   extends: .ansible
+  stage: lint
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
   before_script:
     - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
@@ -84,22 +70,32 @@ sanity:
     refs:
       - merge_requests
       - main
+      - tags
 
 unit:
   extends: .ansible
+  stage: test
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
   before_script:
     - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
     - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
   script:
-    - ansible-test units --local --requirements
+    - ansible-test units --local --requirements --coverage
+  artifacts:
+    when: always
+    paths:
+      - tests/output/coverage/
+    reports:
+      junit: tests/output/**/*.xml
   only:
     refs:
       - merge_requests
       - main
+      - tags
 
 integration:
   extends: .ansible
+  stage: test
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}-docker
   services:
     - name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7-dind
@@ -116,6 +112,31 @@ integration:
     refs:
       - merge_requests
       - main
+      - tags
+
+coverage:
+  stage: coverage
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:3.12
+  dependencies:
+    - unit
+  before_script:
+    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
+    - python -m pip install https://github.com/ansible/ansible/archive/devel.tar.gz
+  script:
+    - ansible-test coverage xml --requirements --stub --color -v
+    - ansible-test coverage report --requirements --color -v
+  coverage: /^TOTAL.*\s+(\d+\%)$/
+  artifacts:
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: tests/output/reports/coverage.xml
+  only:
+    refs:
+      - merge_requests
+      - main
+      - tags
 
 build:
   stage: build

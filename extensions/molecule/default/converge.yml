@@ -10,7 +10,7 @@
         name: dubzland.minio.minio_client
     - name: Add an alias
       dubzland.minio.minio_alias:
-        name: local
+        name: localhost
         url: 'http://localhost:9000'
         access_key: minioadmin
         secret_key: minioadmin
