@@ -82,7 +82,8 @@ unit:
     - ansible-test units --local --requirements --coverage
   artifacts:
     when: always
-    untracked: true
+    paths:
+      - tests/output/coverage/
     reports:
       junit: tests/output/**/*.xml
   only:
