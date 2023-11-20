@@ -122,7 +122,7 @@ coverage:
   script:
     - ansible-test coverage xml --requirements --stub --color -v
     - ansible-test coverage report --requirements --color -v
-  coverage: 'TOTAL \d+(?:\.\d+)?'
+  coverage: /^TOTAL.*\s+(\d+\%)$/
   artifacts:
     when: always
     reports:
