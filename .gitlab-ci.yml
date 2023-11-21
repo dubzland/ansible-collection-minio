@@ -10,6 +10,7 @@ variables:
   PIP_CACHE_DIR: "$XDG_CACHE_DIR/pip"
   PY_COLORS: '1'
   ANSIBLE_FORCE_COLOR: '1'
+  PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/"
 
 stages:
   - lint
@@ -148,14 +149,36 @@ build:
     - python -m pip install ansible-core
   script:
     - ansible-galaxy collection build
+    - sha256sum "${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz" > "${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz.sha256sum"
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+        --upload-file ${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz \
+        ${PACKAGE_REGISTRY_URL}/${CI_PROJECT_NAMESPACE}-minio/${CI_COMMIT_TAG}/${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+        --upload-file ${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz.sha256sum \
+        ${PACKAGE_REGISTRY_URL}/${CI_PROJECT_NAMESPACE}-minio/${CI_COMMIT_TAG}/${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz.sha256sum
   artifacts:
     paths:
-      - "${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_REF_NAME}.tar.gz"
+      - "${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz"
   only:
     refs:
       - tags
 
-deploy:
+release:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - |
+      release-cli create --name "Release $CI_COMMIT_TAG" \
+        --description "See ${CI_PROJECT_URL}/-/blob/${CI_COMMIT_TAG}/CHANGELOG.md for more information." \
+        --tag-name $CI_COMMIT_TAG \
+        --assets-link "{\"name\":\"${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz\",\"url\":\"${PACKAGE_REGISTRY_URL}/${CI_PROJECT_NAMESPACE}-minio/${CI_COMMIT_TAG}/${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz\"}" \
+        --assets-link "{\"name\":\"${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz.sha256sum\",\"url\":\"${PACKAGE_REGISTRY_URL}/${CI_PROJECT_NAMESPACE}-minio/${CI_COMMIT_TAG}/${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz.sha256sum\"}" \
+
+galaxy:
   stage: deploy
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:3.10
   cache:
