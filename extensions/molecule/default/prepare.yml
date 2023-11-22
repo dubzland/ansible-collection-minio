@@ -7,3 +7,14 @@
       ansible.builtin.apt:
         update_cache: true
       when: ansible_os_family == 'Debian'
+    - name: Install the minio python module
+      ansible.builtin.pip:
+        name: minio
+        state: present
+      when: ansible_distribution_release != 'bookworm'
+    - name: Install the minio python module on Debian bookworm
+      ansible.builtin.pip:
+        name: minio
+        extra_args: --break-system-packages
+        state: present
+      when: ansible_os_family == 'Debian' and ansible_distribution_release == 'bookworm'

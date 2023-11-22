@@ -15,3 +15,25 @@
         access_key: minioadmin
         secret_key: minioadmin
         state: present
+    - name: Add a policy
+      dubzland.minio.minio_admin_policy:
+        name: testing
+        data: |
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                      "s3:ListAllMyBuckets"
+                  ],
+                  "Resource": [
+                      "arn:aws:s3:::*"
+                  ]
+                }
+            ]
+          }
+        access_key: minioadmin
+        secret_key: minioadmin
+        minio_url: 'http://localhost:9000'
+        state: present

@@ -31,6 +31,7 @@ Name | Description
 Name | Description
 --- | ---
 `dubzland.minio.minio_alias`|Manages Minio aliases
+`dubzland.minio.minio_admin_policy`|Manages Minio policies
 
 
 ## Licensing
