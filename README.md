@@ -43,6 +43,7 @@ See [LICENSE](https://git.dubzland.net/dubzland/ansible-collection-minio/blob/ma
 ## Author
 
 * [Josh Williams](https://codingprime.com)
+
 [minio_client]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_client_role.html
 [minio_server]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_server_role.html
 [minio_alias]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_alias_module.html
