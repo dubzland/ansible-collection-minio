@@ -10,11 +10,9 @@ __metaclass__ = type
 
 import pytest
 
-from unittest.mock import Mock
-
 
 @pytest.fixture()
-def mock_module():
-    module = Mock()
+def mock_module(mocker):
+    module = mocker.Mock()
     module.get_bin_path.return_value = "/mock/bin/testing"
     return module

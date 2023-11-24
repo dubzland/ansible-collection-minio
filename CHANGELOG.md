@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Ansible module `minio_alias` for managing `mc` aliases (#1)
-- Ansible module `minio_admin_policy` for managing Policies (#4)
+- Ansible module `minio_policy` for managing Policies (#4)
 
 ### Changed
 

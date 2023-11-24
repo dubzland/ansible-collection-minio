@@ -24,14 +24,14 @@ Also tested against the current development version of `ansible-core`.
 ### Roles
 Name | Description
 --- | ---
-`dubzland.minio.minio_server`|Install and configure a Minio server
-`dubzland.minio.minio_client`|Install and configure the Minio client (mc)
+[dubzland.minio.minio_client][minio_client]|Install and configure the Minio client (mc)
+[dubzland.minio.minio_server][minio_server]|Install and configure a Minio server
 
 ### Modules
 Name | Description
 --- | ---
-`dubzland.minio.minio_alias`|Manages Minio aliases
-`dubzland.minio.minio_admin_policy`|Manages Minio policies
+[dubzland.minio.minio_alias][minio_alias]|Manages Minio aliases
+[dubzland.minio.minio_policy][minio_policy]|Manages Minio policies
 
 
 ## Licensing
@@ -43,3 +43,7 @@ See [LICENSE](https://git.dubzland.net/dubzland/ansible-collection-minio/blob/ma
 ## Author
 
 * [Josh Williams](https://codingprime.com)
+[minio_client]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_client_role.html
+[minio_server]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_server_role.html
+[minio_alias]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_alias_module.html
+[minio_policy]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_policy_module.html

@@ -11,7 +11,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 ---
-module: minio_admin_policy
+module: minio_policy
 short_description: Manages Minio policies
 description:
   - When the policy does not exist, it will be created.
@@ -58,12 +58,14 @@ seealso:
   - name: mc admin policy
     description: Documentation for the B(mc admin policy) command.
     link: https://min.io/docs/minio/linux/reference/minio-mc-admin/mc-admin-policy-create.html
+notes:
+  - The O(access_key) provided must have the B(admin:CreatePolicy) permission.
 extends_documentation_fragment: dubzland.minio.minio_auth
 """
 
 EXAMPLES = """
 - name: Add a policy to the  Minio server
-  dubzland.minio.minio_admin_policy:
+  dubzland.minio.minio_policy:
     name: fullaccess
     data: |
       {
@@ -88,12 +90,17 @@ EXAMPLES = """
 
 import json
 import os
+import sys
 import tempfile
 import traceback
 
 from ansible.module_utils.basic import missing_required_lib
 from contextlib import contextmanager
-from urllib.parse import urlparse
+
+if sys.version_info < (3, 5):
+    from urlparse import urlparse
+else:
+    from urllib.parse import urlparse
 
 MINIO_IMP_ERR = None
 try:

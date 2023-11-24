@@ -1,0 +1,54 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: "Stat /usr/local/bin/minio"
+      ansible.builtin.stat:
+        path: "/usr/local/bin/minio"
+      register: minio_bin
+
+    - name: "Ensure /usr/local/bin/minio exists"
+      ansible.builtin.assert:
+        that:
+          - minio_bin.stat.exists == True
+        success_msg: "/usr/local/bin/minio exists"
+        fail_msg: "/usr/local/bin/minio doesn't exist"
+
+    - name: "Stat /lib/systemd/system/minio.service"
+      ansible.builtin.stat:
+        path: "/lib/systemd/system/minio.service"
+      register: minio_systemd_unit
+
+    - name: "Ensure /lib/systemd/system/minio.service exists"
+      ansible.builtin.assert:
+        that:
+          - minio_systemd_unit.stat.exists == True
+        success_msg: "/lib/systemd/system/minio.service exists"
+        fail_msg: "/lib/systemd/system/minio.service doesn't exist"
+
+    - name: "Stat /usr/local/bin/mc"
+      ansible.builtin.stat:
+        path: "/usr/local/bin/mc"
+      register: mc_bin
+
+    - name: "Ensure /usr/local/bin/mc exists"
+      ansible.builtin.assert:
+        that:
+          - mc_bin.stat.exists == True
+        success_msg: "/usr/local/bin/mc exists"
+        fail_msg: "/usr/local/bin/mc doesn't exist"
+
+    - name: "Check Minio service state"
+      ansible.builtin.systemd:
+        name: minio
+        state: started
+      check_mode: True
+      register: minio_service_state
+
+    - name: "Ensure the minio service is running"
+      ansible.builtin.assert:
+        that:
+          - minio_service_state.state == "started"
+        success_msg: "Minio service is running"
+        fail_msg: "Minio service is NOT RUNNING"

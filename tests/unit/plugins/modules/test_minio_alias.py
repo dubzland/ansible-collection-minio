@@ -11,8 +11,7 @@ __metaclass__ = type
 import json
 import pytest
 
-from unittest.mock import patch, ANY
-
+from ansible_collections.dubzland.minio.tests.unit.compat.mock import patch, ANY
 from ansible_collections.dubzland.minio.plugins.modules import minio_alias
 from ansible_collections.dubzland.minio.tests.unit.plugins.modules.utils import (
     AnsibleExitJson,
@@ -124,7 +123,7 @@ def test_alias_delete(mock_module):
 
 class TestMinioAlias(ModuleTestCase):
     def setUp(self):
-        super().setUp()
+        super(TestMinioAlias, self).setUp()
         self.alias_find_mock = patch(
             "ansible_collections.dubzland.minio.plugins.modules.minio_alias.alias_find"
         ).start()

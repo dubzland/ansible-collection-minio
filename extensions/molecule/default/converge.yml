@@ -16,7 +16,7 @@
         secret_key: minioadmin
         state: present
     - name: Add a policy
-      dubzland.minio.minio_admin_policy:
+      dubzland.minio.minio_policy:
         name: testing
         data: |
           {
