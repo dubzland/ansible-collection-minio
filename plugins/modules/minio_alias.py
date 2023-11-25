@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: Josh Williams <jdubz@dubzland.net>
+# Copyright: Josh Williams <jdubz@dubzland.com>
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -15,7 +15,7 @@ module: minio_alias
 short_description: Manages Minio Client (mc) aliases
 description:
   - When the alias does not exist, it will be created.
-  - When the alias does exists and O(state=absent), the alias will be deleted.
+  - When the alias does exist and O(state=absent), the alias will be deleted.
   - When changes are made to the alias, the alias will be updated.
 author:
     - Josh Williams (@t3hpr1m3)

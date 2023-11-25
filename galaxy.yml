@@ -5,7 +5,7 @@ name: minio
 version: 0.0.1  # noqa: galaxy[version-incorrect]
 readme: README.md
 authors:
-  - Josh Williams <jdubz@dubzland.net>
+  - Josh Williams <jdubz@dubzland.com>
 description: Installs and configures the Minio Object Storage server and client.
 license:
   - MIT
@@ -18,16 +18,17 @@ tags:
 dependencies:
   'community.general': '*'
 
-repository: https://git.dubzland.net/dubzland/ansible-collection-minio
+repository: https://git.dubzland.com/dubzland/ansible-collection-minio
 
 # The URL to any online docs
-documentation: https://git.dubzland.net/dubzland/ansible-collection-minio
+documentation:
+  https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/
 
 # The URL to the homepage of the collection/project
-homepage: https://git.dubzland.net/dubzland/ansible-collection-minio
+homepage: https://git.dubzland.com/dubzland/ansible-collection-minio
 
 # The URL to the collection issue tracker
-issues: https://git.dubzland.net/dubzland/ansible-collection-minio/-/issues
+issues: https://git.dubzland.com/dubzland/ansible-collection-minio/-/issues
 build_ignore:
   - .ansible-lint
   - .cache
