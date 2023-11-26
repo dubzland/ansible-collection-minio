@@ -38,14 +38,6 @@ options:
     type: str
     required: true
     description: JSON representation of the policy contents.
-  access_key:
-    type: str
-    required: true
-    description: Minio access key use to connect to the instance.
-  secret_key:
-    type: str
-    required: true
-    description: Minio secret key use to connect to the instance.
   state:
     description:
       - Indicates the desired policy state.
@@ -64,7 +56,7 @@ extends_documentation_fragment: dubzland.minio.minio_auth
 """
 
 EXAMPLES = """
-- name: Add a policy to the  Minio server
+- name: Add a policy to the Minio server
   dubzland.minio.minio_policy:
     name: fullaccess
     data: |
@@ -90,40 +82,15 @@ EXAMPLES = """
 
 import json
 import os
-import sys
 import tempfile
-import traceback
 
-from ansible.module_utils.basic import missing_required_lib
 from contextlib import contextmanager
-
-if sys.version_info < (3, 5):
-    from urlparse import urlparse
-else:
-    from urllib.parse import urlparse
-
-MINIO_IMP_ERR = None
-try:
-    from minio import MinioAdmin
-    from minio.credentials.providers import StaticProvider
-
-    HAS_MINIO_PACKAGE = True
-except Exception:
-    MINIO_IMP_ERR = traceback.format_exc()
-    HAS_MINIO_PACKAGE = False
 
 from ansible.module_utils.basic import AnsibleModule
 
-
-def ensure_minio_package(module):
-    if not HAS_MINIO_PACKAGE:
-        module.fail_json(
-            msg=missing_required_lib(
-                "minio",
-                url="https://min.io/docs/minio/linux/developers/python/minio-py.html",
-            ),
-            exception=MINIO_IMP_ERR,
-        )
+from ansible_collections.dubzland.minio.plugins.module_utils.minio import (
+    minio_admin_client,
+)
 
 
 @contextmanager
@@ -148,25 +115,15 @@ def main():
         ),
         supports_check_mode=True,
     )
-    ensure_minio_package(module)
 
     name = module.params["name"]
     data = module.params["data"]
-    url = module.params["minio_url"]
-    access_key = module.params["access_key"]
-    secret_key = module.params["secret_key"]
     state = module.params["state"]
 
     needs_policy_add = False
     changed = False
 
-    o = urlparse(url)
-    client = MinioAdmin(
-        o.netloc,
-        StaticProvider(access_key, secret_key),
-        "",
-        o.scheme == "https",
-    )
+    client = minio_admin_client(module)
 
     res = client.policy_list()
     policies = json.loads(res)

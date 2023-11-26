@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Ansible module `minio_bucket` for managing Buckets (#3)
+
+### Changed
+
+- Extracted common minio client logic into a module_util
+
 ## [0.0.2]
 
 ### Added
