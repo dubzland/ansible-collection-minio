@@ -53,3 +53,4 @@ See [LICENSE](https://git.dubzland.com/dubzland/ansible-collection-minio/blob/ma
 [minio_alias]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_alias_module.html
 [minio_bucket]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_bucket_module.html
 [minio_policy]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_policy_module.html
+[minio_user]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_user_module.html
