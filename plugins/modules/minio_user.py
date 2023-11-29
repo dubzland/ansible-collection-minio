@@ -64,12 +64,13 @@ extends_documentation_fragment: dubzland.minio.minio_auth
 """
 
 EXAMPLES = """
-- name: Add a Minio bucket
-  dubzland.minio.minio_bucket:
-    name: testbucket
-    minio_url: http://localhost:9000
-    access_key: myuser
+- name: Add a Minio user
+  dubzland.minio.minio_user:
+    access_key: testuser
     secret_key: supersekret
+    minio_access_key: minioadmin
+    minio_secret_key: minioadmin
+    minio_url: http://localhost:9000
     state: present
 """
 
