@@ -1,8 +1,7 @@
 ---
 namespace: dubzland
 name: minio
-# TODO: Bump to 1.0 when modules complete
-version: 0.0.2  # noqa: galaxy[version-incorrect]
+version: 1.0.0
 readme: README.md
 authors:
   - Josh Williams <jdubz@dubzland.com>
@@ -16,12 +15,12 @@ tags:
   - minio
 
 dependencies:
-  'community.general': '*'
+  "community.general": "*"
 
 repository: https://git.dubzland.com/dubzland/ansible-collection-minio
 
 # The URL to any online docs
-documentation:
+documentation: |
   https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/
 
 # The URL to the homepage of the collection/project
