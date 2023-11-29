@@ -59,22 +59,23 @@ EXAMPLES = """
     state: present
 """
 
-from ansible_collections.dubzland.minio.plugins.module_utils.minio import minio_client
+from ansible_collections.dubzland.minio.plugins.module_utils.minio import (
+    minio_client,
+    minio_auth_argument_spec,
+)
 
 from ansible.module_utils.basic import AnsibleModule
 
 
 def main():
-    module = AnsibleModule(
-        argument_spec=dict(
+    argument_spec = minio_auth_argument_spec()
+    argument_spec.update(
+        dict(
             name=dict(type="str", required=True),
-            minio_url=dict(type="str", required=True),
-            access_key=dict(type="str", required=True, no_log=True),
-            secret_key=dict(type="str", required=True, no_log=True),
             state=dict(default="present", choices=["present", "absent"]),
-        ),
-        supports_check_mode=True,
+        )
     )
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     name = module.params["name"]
     state = module.params["state"]

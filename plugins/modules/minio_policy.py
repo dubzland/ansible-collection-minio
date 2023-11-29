@@ -51,7 +51,7 @@ seealso:
     description: Documentation for the B(mc admin policy) command.
     link: https://min.io/docs/minio/linux/reference/minio-mc-admin/mc-admin-policy-create.html
 notes:
-  - The O(access_key) provided must have the B(admin:CreatePolicy) permission.
+  - The O(minio_access_key) provided must have the B(admin:CreatePolicy) permission.
 extends_documentation_fragment: dubzland.minio.minio_auth
 """
 
@@ -90,6 +90,7 @@ from ansible.module_utils.basic import AnsibleModule
 
 from ansible_collections.dubzland.minio.plugins.module_utils.minio import (
     minio_admin_client,
+    minio_auth_argument_spec,
 )
 
 
@@ -104,17 +105,15 @@ def policy_tempfile(data):
 
 
 def main():
-    module = AnsibleModule(
-        argument_spec=dict(
+    argument_spec = minio_auth_argument_spec()
+    argument_spec.update(
+        dict(
             name=dict(type="str", required=True),
             data=dict(type="str", required=True),
-            minio_url=dict(type="str", required=True),
-            access_key=dict(type="str", required=True, no_log=True),
-            secret_key=dict(type="str", required=True, no_log=True),
             state=dict(default="present", choices=["present", "absent"]),
-        ),
-        supports_check_mode=True,
+        )
     )
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     name = module.params["name"]
     data = module.params["data"]

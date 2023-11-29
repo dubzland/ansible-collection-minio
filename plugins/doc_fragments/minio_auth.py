@@ -12,11 +12,11 @@ __metaclass__ = type
 class ModuleDocFragment(object):
     DOCUMENTATION = """
 options:
-    access_key:
+    minio_access_key:
         type: str
         required: true
         description: Minio access key to use to authenticate with the Minio instance.
-    secret_key:
+    minio_secret_key:
         type: str
         required: true
         description: Minio secret key used to connect to the Minio instance.

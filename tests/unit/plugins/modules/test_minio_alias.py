@@ -151,8 +151,6 @@ class TestMinioAlias(ModuleTestCase):
             "secret_key": "supersekret",
         }
         args = record.copy()
-        args["minio_url"] = record["url"]
-        args.pop("url")
         set_module_args(args)
 
         self.alias_find_mock.return_value = record
@@ -172,9 +170,7 @@ class TestMinioAlias(ModuleTestCase):
             "secret_key": "supersekret",
         }
         args = record.copy()
-        args["minio_url"] = record["url"]
         args["secret_key"] = "newsekretkey"
-        args.pop("url")
         set_module_args(args)
 
         self.alias_find_mock.return_value = record
@@ -189,7 +185,7 @@ class TestMinioAlias(ModuleTestCase):
         self.alias_create_or_update_mock.assert_called_with(
             ANY,
             "testing",
-            args["minio_url"],
+            args["url"],
             args["access_key"],
             args["secret_key"],
         )
@@ -202,8 +198,6 @@ class TestMinioAlias(ModuleTestCase):
             "secret_key": "supersekret",
         }
         args = record.copy()
-        args["minio_url"] = record["url"]
-        args.pop("url")
         set_module_args(args)
 
         self.alias_find_mock.return_value = None
@@ -223,7 +217,7 @@ class TestMinioAlias(ModuleTestCase):
         set_module_args(
             {
                 "name": "testing",
-                "minio_url": "http://localhost:9000",
+                "url": "http://localhost:9000",
                 "access_key": "test",
                 "secret_key": "supersekret",
                 "state": "absent",
@@ -248,8 +242,6 @@ class TestMinioAlias(ModuleTestCase):
             "secret_key": "supersekret",
         }
         args = record.copy()
-        args["minio_url"] = record["url"]
-        args.pop("url")
         args["state"] = "absent"
         set_module_args(args)
 
