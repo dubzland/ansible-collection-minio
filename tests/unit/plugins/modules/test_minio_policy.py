@@ -35,11 +35,13 @@ class TestMinioPolicy(ModuleTestCase):
         self.mocker = mocker
 
     def test_module_fail_when_args_missing(self):
-        with self.assertRaises(AnsibleFailJson) as r:
+        with self.assertRaises(AnsibleFailJson):
             set_module_args({})
             minio_policy.main()
 
-    @patch("ansible_collections.dubzland.minio.plugins.modules.minio_policy.MinioAdmin")
+    @patch(
+        "ansible_collections.dubzland.minio.plugins.modules.minio_policy.minio_admin_client"
+    )
     def test_module_unchanged_when_exists(self, mock_admin_client):
         client = MagicMock()
         client.policy_list.return_value = '{"%s": {}}' % "testing"
@@ -57,7 +59,9 @@ class TestMinioPolicy(ModuleTestCase):
             )
             minio_policy.main()
 
-    @patch("ansible_collections.dubzland.minio.plugins.modules.minio_policy.MinioAdmin")
+    @patch(
+        "ansible_collections.dubzland.minio.plugins.modules.minio_policy.minio_admin_client"
+    )
     def test_module_update_when_different(self, mock_admin_client):
         client = MagicMock()
         client.policy_list.return_value = '{"%s": {"existing": "value"}}'
@@ -75,7 +79,9 @@ class TestMinioPolicy(ModuleTestCase):
             )
             minio_policy.main()
 
-    @patch("ansible_collections.dubzland.minio.plugins.modules.minio_policy.MinioAdmin")
+    @patch(
+        "ansible_collections.dubzland.minio.plugins.modules.minio_policy.minio_admin_client"
+    )
     def test_module_create_when_not_exist(self, mock_admin_client):
         client = MagicMock()
         client.policy_list.return_value = "{}"
@@ -99,7 +105,9 @@ class TestMinioPolicy(ModuleTestCase):
         result = r.exception.args[0]
         assert result["changed"] is True
 
-    @patch("ansible_collections.dubzland.minio.plugins.modules.minio_policy.MinioAdmin")
+    @patch(
+        "ansible_collections.dubzland.minio.plugins.modules.minio_policy.minio_admin_client"
+    )
     def test_module_unchanged_when_not_exist_and_state_absent(self, mock_admin_client):
         client = MagicMock()
         client.policy_list.return_value = "{}"
@@ -124,7 +132,9 @@ class TestMinioPolicy(ModuleTestCase):
         result = r.exception.args[0]
         assert result["changed"] is False
 
-    @patch("ansible_collections.dubzland.minio.plugins.modules.minio_policy.MinioAdmin")
+    @patch(
+        "ansible_collections.dubzland.minio.plugins.modules.minio_policy.minio_admin_client"
+    )
     def test_module_changed_when_exists_and_state_absent(self, mock_admin_client):
         client = MagicMock()
         client.policy_list.return_value = '{"testing": {}}'

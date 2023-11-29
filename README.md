@@ -31,6 +31,7 @@ Name | Description
 Name | Description
 --- | ---
 [dubzland.minio.minio_alias][minio_alias]|Manages Minio aliases
+[dubzland.minio.minio_bucket][minio_bucket]|Manages Minio buckets
 [dubzland.minio.minio_policy][minio_policy]|Manages Minio policies
 
 
@@ -47,4 +48,5 @@ See [LICENSE](https://git.dubzland.com/dubzland/ansible-collection-minio/blob/ma
 [minio_client]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_client_role.html
 [minio_server]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_server_role.html
 [minio_alias]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_alias_module.html
+[minio_bucket]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_bucket_module.html
 [minio_policy]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_policy_module.html

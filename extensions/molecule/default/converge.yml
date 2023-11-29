@@ -11,7 +11,7 @@
     - name: Add an alias
       dubzland.minio.minio_alias:
         name: localhost
-        url: 'http://localhost:9000'
+        minio_url: 'http://localhost:9000'
         access_key: minioadmin
         secret_key: minioadmin
         state: present
@@ -36,4 +36,11 @@
         access_key: minioadmin
         secret_key: minioadmin
         minio_url: 'http://localhost:9000'
+        state: present
+    - name: Create a bucket
+      dubzland.minio.minio_bucket:
+        name: testbucket
+        minio_url: 'http://localhost:9000'
+        access_key: minioadmin
+        secret_key: minioadmin
         state: present
