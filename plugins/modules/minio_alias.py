@@ -34,6 +34,18 @@ options:
     type: str
     required: true
     description: Name of the alias to be managed.
+  url:
+    type: str
+    required: true
+    description: Minio server url to be associated with this alias.
+  access_key:
+    type: str
+    required: true
+    description: Access key used to authenticate with the Minio server located at O(url).
+  secret_key:
+    type: str
+    required: true
+    description: Secret key used to authenticate with the Minio server located at O(url).
   state:
     description:
       - Indicates the desired alias state.
@@ -46,7 +58,6 @@ seealso:
   - name: mc alias
     description: Documentation for the B(mc alias) command.
     link: https://min.io/docs/minio/linux/reference/minio-mc/mc-alias.html
-extends_documentation_fragment: dubzland.minio.minio_auth
 """
 
 EXAMPLES = """
@@ -109,7 +120,7 @@ def alias_delete(module, name):
 
     if rc != 0:
         module.fail_json(
-            msg="Failed to delete alias", stdout=out, stderr=err, cmd=cmd.join(" ")
+            msg="Failed to delete alias", stdout=out, stderr=err, cmd=" ".join(cmd)
         )
 
 
@@ -117,7 +128,7 @@ def main():
     module = AnsibleModule(
         argument_spec=dict(
             name=dict(type="str", required=True),
-            minio_url=dict(type="str", required=True),
+            url=dict(type="str", required=True),
             access_key=dict(type="str", required=True, no_log=True),
             secret_key=dict(type="str", required=True, no_log=True),
             state=dict(default="present", choices=["present", "absent"]),
@@ -131,7 +142,7 @@ def main():
     )
 
     name = module.params["name"]
-    url = module.params["minio_url"]
+    url = module.params["url"]
     access_key = module.params["access_key"]
     secret_key = module.params["secret_key"]
     state = module.params["state"]

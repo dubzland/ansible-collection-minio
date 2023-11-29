@@ -11,9 +11,16 @@
     - name: Add an alias
       dubzland.minio.minio_alias:
         name: localhost
-        minio_url: 'http://localhost:9000'
+        url: "http://localhost:9000"
         access_key: minioadmin
         secret_key: minioadmin
+        state: present
+    - name: Create a bucket
+      dubzland.minio.minio_bucket:
+        name: testbucket
+        minio_url: "http://localhost:9000"
+        minio_access_key: minioadmin
+        minio_secret_key: minioadmin
         state: present
     - name: Add a policy
       dubzland.minio.minio_policy:
@@ -25,22 +32,24 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                      "s3:ListAllMyBuckets"
+                      "s3:*"
                   ],
                   "Resource": [
-                      "arn:aws:s3:::*"
+                      "arn:aws:s3:::testbucket*/*"
                   ]
                 }
             ]
           }
-        access_key: minioadmin
-        secret_key: minioadmin
-        minio_url: 'http://localhost:9000'
+        minio_access_key: minioadmin
+        minio_secret_key: minioadmin
+        minio_url: "http://localhost:9000"
         state: present
-    - name: Create a bucket
-      dubzland.minio.minio_bucket:
-        name: testbucket
-        minio_url: 'http://localhost:9000'
-        access_key: minioadmin
-        secret_key: minioadmin
+    - name: Add a user
+      dubzland.minio.minio_user:
+        access_key: testuser
+        secret_key: testuser123
+        policy: testing
+        minio_url: "http://localhost:9000"
+        minio_access_key: minioadmin
+        minio_secret_key: minioadmin
         state: present

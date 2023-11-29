@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Ansible module `minio_bucket` for managing Buckets (#3)
+- Ansible module `minio_user` for managing Users (#2)
 
 ### Changed
 

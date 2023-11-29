@@ -1,4 +1,5 @@
 # Ansible Collection: Minio
+
 [![Gitlab pipeline status (self-hosted)](https://git.dubzland.com/dubzland/ansible-collection-minio/badges/main/pipeline.svg)](https://git.dubzland.com/dubzland/ansible-collection-minio/pipelines?scope=all&page=1&ref=main)
 [![Gitlab coverage (self-hosted)](https://git.dubzland.com/dubzland/ansible-collection-minio/badges/main/coverage.svg?job=coverage)](https://git.dubzland.com/dubzland/ansible-collection-minio/pipelines?scope=all&page=1&ref=main)
 [![Ansible Galaxy](https://img.shields.io/badge/dynamic/json?style=flat&label=galaxy&prefix=v&url=https://galaxy.ansible.com/api/v3/collections/dubzland/minio/&query=highest_version.version)](https://galaxy.ansible.com/ui/repo/published/dubzland/minio/)
@@ -22,18 +23,20 @@ Also tested against the current development version of `ansible-core`.
 ## Included content
 
 ### Roles
-Name | Description
---- | ---
-[dubzland.minio.minio_client][minio_client]|Install and configure the Minio client (mc)
-[dubzland.minio.minio_server][minio_server]|Install and configure a Minio server
+
+| Name                                        | Description                                 |
+| ------------------------------------------- | ------------------------------------------- |
+| [dubzland.minio.minio_client][minio_client] | Install and configure the Minio client (mc) |
+| [dubzland.minio.minio_server][minio_server] | Install and configure a Minio server        |
 
 ### Modules
-Name | Description
---- | ---
-[dubzland.minio.minio_alias][minio_alias]|Manages Minio aliases
-[dubzland.minio.minio_bucket][minio_bucket]|Manages Minio buckets
-[dubzland.minio.minio_policy][minio_policy]|Manages Minio policies
 
+| Name                                        | Description            |
+| ------------------------------------------- | ---------------------- |
+| [dubzland.minio.minio_alias][minio_alias]   | Manages Minio aliases  |
+| [dubzland.minio.minio_bucket][minio_bucket] | Manages Minio buckets  |
+| [dubzland.minio.minio_policy][minio_policy] | Manages Minio policies |
+| [dubzland.minio.minio_user][minio_user]     | Manages Minio users    |
 
 ## Licensing
 
@@ -43,7 +46,7 @@ See [LICENSE](https://git.dubzland.com/dubzland/ansible-collection-minio/blob/ma
 
 ## Author
 
-* [Josh Williams](https://codingprime.com)
+- [Josh Williams](https://codingprime.com)
 
 [minio_client]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_client_role.html
 [minio_server]: https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/minio_server_role.html

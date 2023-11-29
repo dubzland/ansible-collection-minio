@@ -11,10 +11,11 @@ __metaclass__ = type
 import json
 
 from ansible_collections.dubzland.minio.tests.unit.compat import unittest
-from ansible_collections.dubzland.minio.tests.unit.compat.mock import patch
+from ansible_collections.dubzland.minio.tests.unit.compat.mock import patch, MagicMock
 from ansible.module_utils import basic
 from ansible.module_utils.common.text.converters import to_bytes
 from contextlib import contextmanager
+from functools import wraps
 
 
 class AnsibleExitJson(Exception):
@@ -64,6 +65,42 @@ def mock_run_command(module, stdout, stderr, rc):
         yield run_command
 
 
+def with_mock_client(module_name):
+    def decorator(func):
+        @wraps(func)
+        def inner(*args, **kwargs):
+            with patch(
+                "ansible_collections.dubzland.minio.plugins.modules.%s.minio_client"
+                % module_name
+            ) as mock_client:
+                client = MagicMock()
+                mock_client.return_value = client
+                newargs = args + (client,)
+                return func(*newargs, **kwargs)
+
+        return inner
+
+    return decorator
+
+
+def with_mock_admin_client(module_name):
+    def decorator(func):
+        @wraps(func)
+        def inner(*args, **kwargs):
+            with patch(
+                "ansible_collections.dubzland.minio.plugins.modules.%s.minio_admin_client"
+                % module_name
+            ) as mock_client:
+                client = MagicMock()
+                mock_client.return_value = client
+                newargs = args + (client,)
+                return func(*newargs, **kwargs)
+
+        return inner
+
+    return decorator
+
+
 class ModuleTestCase(unittest.TestCase):
     def setUp(self):
         self.mock_module = patch.multiple(
@@ -74,3 +111,10 @@ class ModuleTestCase(unittest.TestCase):
         )
         self.mock_module.start()
         self.addCleanup(self.mock_module.stop)
+
+
+class MinioAdminClientTestCase(ModuleTestCase):
+    def setUp(self):
+        super(MinioAdminClientTestCase, self).setUp()
+
+        self.mock_client = MagicMock()

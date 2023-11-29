@@ -18,6 +18,16 @@ else:
 
 from ansible.module_utils.basic import missing_required_lib
 
+
+def minio_auth_argument_spec():
+    arg_spec = dict(
+        minio_access_key=dict(type="str", required=True, no_log=True),
+        minio_secret_key=dict(type="str", required=True, no_log=True),
+        minio_url=dict(type="str", required=True),
+    )
+    return arg_spec
+
+
 MINIO_IMP_ERR = None
 try:
     from minio import Minio, MinioAdmin
@@ -47,8 +57,8 @@ def minio_client(module):
 
     client = Minio(
         o.netloc,
-        access_key=module.params["access_key"],
-        secret_key=module.params["secret_key"],
+        access_key=module.params["minio_access_key"],
+        secret_key=module.params["minio_secret_key"],
         secure=o.scheme == "https",
     )
 
@@ -62,7 +72,9 @@ def minio_admin_client(module):
 
     client = MinioAdmin(
         o.netloc,
-        StaticProvider(module.params["access_key"], module.params["secret_key"]),
+        StaticProvider(
+            module.params["minio_access_key"], module.params["minio_secret_key"]
+        ),
         "",
         o.scheme == "https",
     )
