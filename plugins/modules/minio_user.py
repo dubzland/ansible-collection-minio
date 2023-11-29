@@ -45,7 +45,7 @@ options:
   force:
     type: bool
     default: False
-    description: When set to V(true), the O(access_key) will always be updated (and the module will always return changed to V(true)).
+    description: When set to V(true), the O(secret_key) will always be updated (and the module will always return changed to V(true)).
   state:
     description:
       - Indicates the desired user state.
