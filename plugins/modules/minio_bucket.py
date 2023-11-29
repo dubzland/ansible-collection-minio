@@ -54,8 +54,8 @@ EXAMPLES = """
   dubzland.minio.minio_bucket:
     name: testbucket
     minio_url: http://localhost:9000
-    access_key: myuser
-    secret_key: supersekret
+    minio_access_key: myuser
+    minio_secret_key: supersekret
     state: present
 """
 
