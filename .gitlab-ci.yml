@@ -8,8 +8,8 @@ variables:
   GIT_CLONE_PATH: $ANSIBLE_COLLECTIONS_PATH/ansible_collections/$CI_PROJECT_NAMESPACE/minio
   XDG_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
   PIP_CACHE_DIR: "$XDG_CACHE_DIR/pip"
-  PY_COLORS: '1'
-  ANSIBLE_FORCE_COLOR: '1'
+  PY_COLORS: "1"
+  ANSIBLE_FORCE_COLOR: "1"
   PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/"
 
 stages:
@@ -25,34 +25,34 @@ stages:
       - .cache/pip/
   parallel:
     matrix:
-      - PYTHON_VERSION: '3.8'
+      - PYTHON_VERSION: "3.8"
         ANSIBLE_VERSION:
-          - 'stable-2.13'
-      - PYTHON_VERSION: '3.9'
+          - "stable-2.13"
+      - PYTHON_VERSION: "3.9"
         ANSIBLE_VERSION:
-          - 'stable-2.13'
-          - 'stable-2.14'
-          - 'stable-2.15'
-      - PYTHON_VERSION: '3.10'
+          - "stable-2.13"
+          - "stable-2.14"
+          - "stable-2.15"
+      - PYTHON_VERSION: "3.10"
         ANSIBLE_VERSION:
-          - 'stable-2.13'
-          - 'stable-2.14'
-          - 'stable-2.15'
-          - 'stable-2.16'
-          - 'devel'
-          - 'milestone'
-      - PYTHON_VERSION: '3.11'
+          - "stable-2.13"
+          - "stable-2.14"
+          - "stable-2.15"
+          - "stable-2.16"
+          - "devel"
+          - "milestone"
+      - PYTHON_VERSION: "3.11"
         ANSIBLE_VERSION:
-          - 'stable-2.14'
-          - 'stable-2.15'
-          - 'stable-2.16'
-          - 'devel'
-          - 'milestone'
-      - PYTHON_VERSION: '3.12'
+          - "stable-2.14"
+          - "stable-2.15"
+          - "stable-2.16"
+          - "devel"
+          - "milestone"
+      - PYTHON_VERSION: "3.12"
         ANSIBLE_VERSION:
-          - 'stable-2.16'
-          - 'devel'
-          - 'milestone'
+          - "stable-2.16"
+          - "devel"
+          - "milestone"
 
 sanity:
   extends: .ansible
@@ -70,8 +70,6 @@ sanity:
   only:
     refs:
       - merge_requests
-      - main
-      - tags
 
 unit:
   extends: .ansible
@@ -91,8 +89,6 @@ unit:
   only:
     refs:
       - merge_requests
-      - main
-      - tags
 
 integration:
   extends: .ansible
@@ -112,8 +108,6 @@ integration:
   only:
     refs:
       - merge_requests
-      - main
-      - tags
 
 coverage:
   stage: coverage
@@ -136,8 +130,6 @@ coverage:
   only:
     refs:
       - merge_requests
-      - main
-      - tags
 
 build:
   stage: build
