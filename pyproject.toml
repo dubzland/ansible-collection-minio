@@ -1,2 +1,3 @@
 [tool.pyright]
-typeCheckingMode = "off"
+extraPaths = ["../../../"]
+typeCheckingMode = "basic"

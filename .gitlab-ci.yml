@@ -23,6 +23,33 @@ stages:
   cache:
     paths:
       - .cache/pip/
+
+.sanity:
+  extends: .ansible
+  stage: lint
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
+  before_script:
+    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
+    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
+  script:
+    - ansible-test sanity --local --requirements --junit
+  artifacts:
+    when: always
+    reports:
+      junit: tests/output/**/*.xml
+
+sanity:
+  extends: .sanity
+  variables:
+    PYTHON_VERSION: "3.12"
+    ANSIBLE_VERSION: "stable-2.16"
+  only:
+    refs:
+      - merge_requests
+      - main
+
+sanity-release:
+  extends: .sanity
   parallel:
     matrix:
       - PYTHON_VERSION: "3.8"
@@ -53,26 +80,11 @@ stages:
           - "stable-2.16"
           - "devel"
           - "milestone"
-
-sanity:
-  extends: .ansible
-  stage: lint
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
-  before_script:
-    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
-    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
-  script:
-    - ansible-test sanity --local --requirements --junit
-  artifacts:
-    when: always
-    reports:
-      junit: tests/output/**/*.xml
   only:
     refs:
-      - merge_requests
-      - main
+      - tags
 
-unit:
+.unit:
   extends: .ansible
   stage: test
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
@@ -87,12 +99,54 @@ unit:
       - tests/output/coverage/
     reports:
       junit: tests/output/**/*.xml
+
+unit:
+  extends: .unit
+  variables:
+    PYTHON_VERSION: "3.12"
+    ANSIBLE_VERSION: "stable-2.16"
   only:
     refs:
       - merge_requests
       - main
 
-integration:
+unit-release:
+  extends: .unit
+  parallel:
+    matrix:
+      - PYTHON_VERSION: "3.8"
+        ANSIBLE_VERSION:
+          - "stable-2.13"
+      - PYTHON_VERSION: "3.9"
+        ANSIBLE_VERSION:
+          - "stable-2.13"
+          - "stable-2.14"
+          - "stable-2.15"
+      - PYTHON_VERSION: "3.10"
+        ANSIBLE_VERSION:
+          - "stable-2.13"
+          - "stable-2.14"
+          - "stable-2.15"
+          - "stable-2.16"
+          - "devel"
+          - "milestone"
+      - PYTHON_VERSION: "3.11"
+        ANSIBLE_VERSION:
+          - "stable-2.14"
+          - "stable-2.15"
+          - "stable-2.16"
+          - "devel"
+          - "milestone"
+      - PYTHON_VERSION: "3.12"
+        ANSIBLE_VERSION:
+          - "stable-2.16"
+          - "devel"
+          - "milestone"
+  only:
+    refs:
+      - tags
+
+.molecule:
   extends: .ansible
   stage: test
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}-docker
@@ -107,10 +161,52 @@ integration:
     - cd extensions
   script:
     - molecule test
+
+molecule:
+  extends: .molecule
+  variables:
+    PYTHON_VERSION: "3.12"
+    ANSIBLE_VERSION: "stable-2.16"
   only:
     refs:
       - merge_requests
       - main
+
+molecule-release:
+  extends: .molecule
+  parallel:
+    matrix:
+      - PYTHON_VERSION: "3.8"
+        ANSIBLE_VERSION:
+          - "stable-2.13"
+      - PYTHON_VERSION: "3.9"
+        ANSIBLE_VERSION:
+          - "stable-2.13"
+          - "stable-2.14"
+          - "stable-2.15"
+      - PYTHON_VERSION: "3.10"
+        ANSIBLE_VERSION:
+          - "stable-2.13"
+          - "stable-2.14"
+          - "stable-2.15"
+          - "stable-2.16"
+          - "devel"
+          - "milestone"
+      - PYTHON_VERSION: "3.11"
+        ANSIBLE_VERSION:
+          - "stable-2.14"
+          - "stable-2.15"
+          - "stable-2.16"
+          - "devel"
+          - "milestone"
+      - PYTHON_VERSION: "3.12"
+        ANSIBLE_VERSION:
+          - "stable-2.16"
+          - "devel"
+          - "milestone"
+  only:
+    refs:
+      - tags
 
 coverage:
   stage: coverage
