@@ -48,3 +48,9 @@ argument_specs:
       minio_server_url:
         type: str
         description: External URL used to access the server.
+      minio_server_browser_redirect_url:
+        type: str
+        description: External URL used to access the Minio web console.
+      minio_server_opts:
+        type: str
+        description: Additional options to pass to the minio service.

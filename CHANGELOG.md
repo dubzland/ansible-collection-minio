@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Minio server url can now be specified (#8)
+- Minio options can be specified to allow setting the listen port
 
 ### Changed
 
