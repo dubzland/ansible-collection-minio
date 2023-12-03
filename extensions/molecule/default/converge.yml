@@ -5,6 +5,8 @@
     - name: Install Server
       ansible.builtin.include_role:
         name: dubzland.minio.minio_server
+      vars:
+        minio_server_url: "https://s3.example.com"
     - name: Install Client
       ansible.builtin.include_role:
         name: dubzland.minio.minio_client
