@@ -2,3 +2,4 @@
 minio_server_storage_dir: /srv/minio
 minio_server_admin_username: minioadmin
 minio_server_admin_password: minioadmin
+# minio_server_url: https://s3.example.com

@@ -15,4 +15,14 @@ MINIO_VOLUMES="{{ minio_server_storage_dir }}"
 
 # Uncomment the following line and replace the value with the correct hostname for the local machine and port for the MinIO server (9000 by default).
 
+{% if minio_server_url is defined %}
+MINIO_SERVER_URL="{{ minio_server_url }}"
+{% else %}
 #MINIO_SERVER_URL="http://minio.example.net:9000"
+{% endif %}
+{% if minio_server_browser_redirect_url is defined %}
+MINIO_BROWSER_REDIRECT_URL="{{ minio_server_browser_redirect_url }}"
+{% endif %}
+{% if minio_server_opts is defined %}
+MINIO_OPTS="{{ minio_server_opts }}"
+{% endif %}

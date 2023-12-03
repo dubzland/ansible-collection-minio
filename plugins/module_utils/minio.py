@@ -20,12 +20,11 @@ from ansible.module_utils.basic import missing_required_lib
 
 
 def minio_auth_argument_spec():
-    arg_spec = dict(
+    return dict(
         minio_access_key=dict(type="str", required=True, no_log=True),
         minio_secret_key=dict(type="str", required=True, no_log=True),
         minio_url=dict(type="str", required=True),
     )
-    return arg_spec
 
 
 MINIO_IMP_ERR = None
@@ -34,7 +33,8 @@ try:
     from minio.credentials.providers import StaticProvider
 
     HAS_MINIO_PACKAGE = True
-except Exception:
+except ImportError:
+    Minio = MinioAdmin = StaticProvider = None
     MINIO_IMP_ERR = traceback.format_exc()
     HAS_MINIO_PACKAGE = False
 
