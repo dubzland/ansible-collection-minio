@@ -9,7 +9,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import sys
-import traceback
 
 if sys.version_info < (3, 5):
     from urlparse import urlparse
@@ -19,46 +18,51 @@ else:
 from ansible.module_utils.basic import missing_required_lib
 
 
-def minio_auth_argument_spec():
-    return dict(
-        minio_access_key=dict(type="str", required=True, no_log=True),
-        minio_secret_key=dict(type="str", required=True, no_log=True),
-        minio_url=dict(type="str", required=True),
-    )
-
-
-MINIO_IMP_ERR = None
 try:
-    from minio import Minio, MinioAdmin
-    from minio.credentials.providers import StaticProvider
+    import minio
 
-    HAS_MINIO_PACKAGE = True
+    python_minio_installed = True
 except ImportError:
-    Minio = MinioAdmin = StaticProvider = None
-    MINIO_IMP_ERR = traceback.format_exc()
-    HAS_MINIO_PACKAGE = False
+    python_minio_installed = False
+
+
+def minio_argument_spec(**kwargs):
+    argument_spec = dict(
+        auth=dict(
+            type="dict",
+            required=True,
+            options=dict(
+                access_key=dict(type="str", required=True, no_log=True),
+                secret_key=dict(type="str", required=True, no_log=True),
+                url=dict(type="str", required=True),
+            ),
+        )
+    )
+    argument_spec.update(**kwargs)
+    return argument_spec
 
 
 def ensure_minio_package(module):
-    if not HAS_MINIO_PACKAGE:
+    if not python_minio_installed:
         module.fail_json(
             msg=missing_required_lib(
                 "minio",
                 url="https://min.io/docs/minio/linux/developers/python/minio-py.html",
             ),
-            exception=MINIO_IMP_ERR,
         )
 
 
 def minio_client(module):
     ensure_minio_package(module)
 
-    o = urlparse(module.params["minio_url"])
+    auth = module.params["auth"]
 
-    client = Minio(
+    o = urlparse(auth["url"])
+
+    client = minio.Minio(
         o.netloc,
-        access_key=module.params["minio_access_key"],
-        secret_key=module.params["minio_secret_key"],
+        access_key=auth["access_key"],
+        secret_key=auth["secret_key"],
         secure=o.scheme == "https",
     )
 
@@ -68,12 +72,13 @@ def minio_client(module):
 def minio_admin_client(module):
     ensure_minio_package(module)
 
-    o = urlparse(module.params["minio_url"])
+    auth = module.params["auth"]
+    o = urlparse(auth["url"])
 
-    client = MinioAdmin(
+    client = minio.MinioAdmin(
         o.netloc,
-        StaticProvider(
-            module.params["minio_access_key"], module.params["minio_secret_key"]
+        minio.credentials.providers.StaticProvider(
+            auth["access_key"], auth["secret_key"]
         ),
         "",
         o.scheme == "https",

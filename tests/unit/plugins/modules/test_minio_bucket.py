@@ -44,9 +44,11 @@ class TestMinioBucket(ModuleTestCase):
             set_module_args(
                 {
                     "name": "testing",
-                    "minio_access_key": "testing",
-                    "minio_secret_key": "supersekret",
-                    "minio_url": "http://localhost:9000",
+                    "auth": {
+                        "access_key": "testing",
+                        "secret_key": "supersekret",
+                        "url": "http://localhost:9000",
+                    },
                 }
             )
             minio_bucket.main()
@@ -66,9 +68,11 @@ class TestMinioBucket(ModuleTestCase):
             set_module_args(
                 {
                     "name": "testing",
-                    "minio_access_key": "testing",
-                    "minio_secret_key": "supersekret",
-                    "minio_url": "http://localhost:9000",
+                    "auth": {
+                        "access_key": "testing",
+                        "secret_key": "supersekret",
+                        "url": "http://localhost:9000",
+                    },
                 }
             )
             minio_bucket.main()
@@ -86,9 +90,11 @@ class TestMinioBucket(ModuleTestCase):
             set_module_args(
                 {
                     "name": "testing",
-                    "minio_access_key": "testing",
-                    "minio_secret_key": "supersekret",
-                    "minio_url": "http://localhost:9000",
+                    "auth": {
+                        "access_key": "testing",
+                        "secret_key": "supersekret",
+                        "url": "http://localhost:9000",
+                    },
                     "state": "absent",
                 }
             )
@@ -107,9 +113,11 @@ class TestMinioBucket(ModuleTestCase):
             set_module_args(
                 {
                     "name": "testing",
-                    "minio_access_key": "testing",
-                    "minio_secret_key": "supersekret",
-                    "minio_url": "http://localhost:9000",
+                    "auth": {
+                        "access_key": "testing",
+                        "secret_key": "supersekret",
+                        "url": "http://localhost:9000",
+                    },
                     "state": "absent",
                 }
             )

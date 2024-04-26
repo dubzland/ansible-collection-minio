@@ -68,9 +68,10 @@ EXAMPLES = """
   dubzland.minio.minio_user:
     access_key: testuser
     secret_key: supersekret
-    minio_access_key: minioadmin
-    minio_secret_key: minioadmin
-    minio_url: http://localhost:9000
+    auth:
+      access_key: minioadmin
+      secret_key: minioadmin
+      url: http://localhost:9000
     state: present
 """
 
@@ -78,7 +79,7 @@ import json
 
 from ansible_collections.dubzland.minio.plugins.module_utils.minio import (
     minio_admin_client,
-    minio_auth_argument_spec,
+    minio_argument_spec,
 )
 
 from ansible.module_utils.basic import AnsibleModule
@@ -185,17 +186,14 @@ class MinioUser:
 
 
 def main():
-    argument_spec = minio_auth_argument_spec()
-    argument_spec.update(
-        dict(
-            access_key=dict(type="str", required=True, no_log=True),
-            secret_key=dict(type="str", required=True, no_log=True),
-            policy=dict(type="str", required=False, default=None),
-            force=dict(type="bool", required=False, default=False),
-            state=dict(
-                default="present", choices=["present", "absent", "enabled", "disabled"]
-            ),
-        )
+    argument_spec = minio_argument_spec(
+        access_key=dict(type="str", required=True, no_log=True),
+        secret_key=dict(type="str", required=True, no_log=True),
+        policy=dict(type="str", required=False, default=None),
+        force=dict(type="bool", required=False, default=False),
+        state=dict(
+            default="present", choices=["present", "absent", "enabled", "disabled"]
+        ),
     )
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
