@@ -62,6 +62,7 @@ options:
         required: true
         description: >-
           List of resources to which this policy will apply.
+    description: List of policy statements to include
   state:
     description:
       - Indicates the desired policy state.
