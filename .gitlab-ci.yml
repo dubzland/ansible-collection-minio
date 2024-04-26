@@ -20,6 +20,8 @@ unit:
 
 coverage:
   extends: .ansible:coverage
+  needs:
+    - unit
 
 unit-release:
   extends: .ansible:unit-release
