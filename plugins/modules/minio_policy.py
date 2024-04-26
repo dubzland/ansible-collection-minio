@@ -161,7 +161,7 @@ def main():
     needs_policy_add = False
     changed = False
 
-    client = minio_admin_client()
+    client = minio_admin_client(module)
 
     res = client.policy_list()
     policies = json.loads(res)
