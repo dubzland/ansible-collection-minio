@@ -1,287 +1,48 @@
 ---
+include:
+  - project: 'dubzland/ci-templates'
+    file: 'ansible-collection.yml'
+
 variables:
-  DOCKER_BUILDKIT: 1
-  DOCKER_TLS_CERTDIR: "/certs"
-  BASH_ENV: /root/.bashrc
-  ANSIBLE_COLLECTIONS_PATH: $CI_BUILDS_DIR/ansible/collections
-  REGISTRY_PROXY_URL: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/
-  GIT_CLONE_PATH: $ANSIBLE_COLLECTIONS_PATH/ansible_collections/$CI_PROJECT_NAMESPACE/minio
-  XDG_CACHE_DIR: "$CI_PROJECT_DIR/.cache"
-  PIP_CACHE_DIR: "$XDG_CACHE_DIR/pip"
-  PY_COLORS: "1"
-  ANSIBLE_FORCE_COLOR: "1"
-  PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/"
+  DUBZLAND_COLLECTION_NAME: minio
 
-stages:
-  - lint
-  - test
-  - coverage
-  - build
-  - deploy
-
-.ansible:
-  cache:
-    paths:
-      - .cache/pip/
-
-.sanity:
-  extends: .ansible
-  stage: lint
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
-  before_script:
-    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
-    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
-  script:
-    - ansible-test sanity --local --requirements --junit
-  artifacts:
-    when: always
-    reports:
-      junit: tests/output/**/*.xml
+lint:
+  extends: .ansible:lint
 
 sanity:
-  extends: .sanity
-  variables:
-    PYTHON_VERSION: "3.12"
-    ANSIBLE_VERSION: "stable-2.16"
-  only:
-    refs:
-      - merge_requests
-      - main
+  extends: .ansible:sanity
 
 sanity-release:
-  extends: .sanity
-  parallel:
-    matrix:
-      - PYTHON_VERSION: "3.8"
-        ANSIBLE_VERSION:
-          - "stable-2.13"
-      - PYTHON_VERSION: "3.9"
-        ANSIBLE_VERSION:
-          - "stable-2.13"
-          - "stable-2.14"
-          - "stable-2.15"
-      - PYTHON_VERSION: "3.10"
-        ANSIBLE_VERSION:
-          - "stable-2.13"
-          - "stable-2.14"
-          - "stable-2.15"
-          - "stable-2.16"
-          - "devel"
-          - "milestone"
-      - PYTHON_VERSION: "3.11"
-        ANSIBLE_VERSION:
-          - "stable-2.14"
-          - "stable-2.15"
-          - "stable-2.16"
-          - "devel"
-          - "milestone"
-      - PYTHON_VERSION: "3.12"
-        ANSIBLE_VERSION:
-          - "stable-2.16"
-          - "devel"
-          - "milestone"
-  only:
-    refs:
-      - tags
-
-.unit:
-  extends: .ansible
-  stage: test
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}
-  before_script:
-    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
-    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
-  script:
-    - ansible-test units --local --requirements --coverage
-  artifacts:
-    when: always
-    paths:
-      - tests/output/coverage/
-    reports:
-      junit: tests/output/**/*.xml
+  extends: .ansible:sanity-release
 
 unit:
-  extends: .unit
-  variables:
-    PYTHON_VERSION: "3.12"
-    ANSIBLE_VERSION: "stable-2.16"
-  only:
-    refs:
-      - merge_requests
-      - main
-
-unit-release:
-  extends: .unit
-  parallel:
-    matrix:
-      - PYTHON_VERSION: "3.8"
-        ANSIBLE_VERSION:
-          - "stable-2.13"
-      - PYTHON_VERSION: "3.9"
-        ANSIBLE_VERSION:
-          - "stable-2.13"
-          - "stable-2.14"
-          - "stable-2.15"
-      - PYTHON_VERSION: "3.10"
-        ANSIBLE_VERSION:
-          - "stable-2.13"
-          - "stable-2.14"
-          - "stable-2.15"
-          - "stable-2.16"
-          - "devel"
-          - "milestone"
-      - PYTHON_VERSION: "3.11"
-        ANSIBLE_VERSION:
-          - "stable-2.14"
-          - "stable-2.15"
-          - "stable-2.16"
-          - "devel"
-          - "milestone"
-      - PYTHON_VERSION: "3.12"
-        ANSIBLE_VERSION:
-          - "stable-2.16"
-          - "devel"
-          - "milestone"
-  only:
-    refs:
-      - tags
-
-.molecule:
-  extends: .ansible
-  stage: test
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:${PYTHON_VERSION}-docker
-  services:
-    - name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7-dind
-      alias: docker
-  before_script:
-    - docker login -u $CI_DEPENDENCY_PROXY_USER -p $CI_DEPENDENCY_PROXY_PASSWORD $CI_DEPENDENCY_PROXY_SERVER
-    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
-    - python -m pip install https://github.com/ansible/ansible/archive/${ANSIBLE_VERSION}.tar.gz
-    - python -m pip install -r requirements-test.txt
-    - cd extensions
-  script:
-    - molecule test
-
-molecule:
-  extends: .molecule
-  variables:
-    PYTHON_VERSION: "3.12"
-    ANSIBLE_VERSION: "stable-2.16"
-  only:
-    refs:
-      - merge_requests
-      - main
-
-molecule-release:
-  extends: .molecule
-  parallel:
-    matrix:
-      - PYTHON_VERSION: "3.8"
-        ANSIBLE_VERSION:
-          - "stable-2.13"
-      - PYTHON_VERSION: "3.9"
-        ANSIBLE_VERSION:
-          - "stable-2.13"
-          - "stable-2.14"
-          - "stable-2.15"
-      - PYTHON_VERSION: "3.10"
-        ANSIBLE_VERSION:
-          - "stable-2.13"
-          - "stable-2.14"
-          - "stable-2.15"
-          - "stable-2.16"
-          - "devel"
-          - "milestone"
-      - PYTHON_VERSION: "3.11"
-        ANSIBLE_VERSION:
-          - "stable-2.14"
-          - "stable-2.15"
-          - "stable-2.16"
-          - "devel"
-          - "milestone"
-      - PYTHON_VERSION: "3.12"
-        ANSIBLE_VERSION:
-          - "stable-2.16"
-          - "devel"
-          - "milestone"
-  only:
-    refs:
-      - tags
+  extends: .ansible:unit
 
 coverage:
-  stage: coverage
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:3.12
-  dependencies:
+  extends: .ansible:coverage
+  needs:
     - unit
-  before_script:
-    - echo -e "[global]\ncache-dir = $PIP_CACHE_DIR" > /etc/pip.conf
-    - python -m pip install https://github.com/ansible/ansible/archive/devel.tar.gz
-  script:
-    - ansible-test coverage xml --requirements --stub --color -v
-    - ansible-test coverage report --requirements --color -v
-  coverage: /^TOTAL.*\s+(\d+\%)$/
-  artifacts:
-    when: always
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: tests/output/reports/coverage.xml
-  only:
-    refs:
-      - merge_requests
-      - main
+
+unit-release:
+  extends: .ansible:unit-release
+
+molecule:
+  extends: .ansible:molecule
+
+molecule-release:
+  extends: .ansible:molecule-release
+
+docs:
+  extends: .ansible-collection:docs
 
 build:
-  stage: build
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:3.10
-  cache:
-    paths:
-      - .cache/pip/
-  before_script:
-    - python -m pip install ansible-core
-  script:
-    - ansible-galaxy collection build
-    - sha256sum "${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz" > "${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz.sha256sum"
-    - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-        --upload-file ${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz \
-        ${PACKAGE_REGISTRY_URL}/${CI_PROJECT_NAMESPACE}-minio/${CI_COMMIT_TAG}/${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz
-    - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-        --upload-file ${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz.sha256sum \
-        ${PACKAGE_REGISTRY_URL}/${CI_PROJECT_NAMESPACE}-minio/${CI_COMMIT_TAG}/${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz.sha256sum
-  artifacts:
-    paths:
-      - "${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz"
-  only:
-    refs:
-      - tags
+  extends: .ansible-collection:build
 
 release:
-  stage: deploy
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
-  rules:
-    - if: $CI_COMMIT_TAG
-  script:
-    - |
-      release-cli create --name "Release $CI_COMMIT_TAG" \
-        --description "See ${CI_PROJECT_URL}/-/blob/${CI_COMMIT_TAG}/CHANGELOG.md for more information." \
-        --tag-name $CI_COMMIT_TAG \
-        --assets-link "{\"name\":\"${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz\",\"url\":\"${PACKAGE_REGISTRY_URL}/${CI_PROJECT_NAMESPACE}-minio/${CI_COMMIT_TAG}/${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz\"}" \
-        --assets-link "{\"name\":\"${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz.sha256sum\",\"url\":\"${PACKAGE_REGISTRY_URL}/${CI_PROJECT_NAMESPACE}-minio/${CI_COMMIT_TAG}/${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_TAG}.tar.gz.sha256sum\"}" \
+  extends: .ansible-collection:release
 
 galaxy:
-  stage: deploy
-  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/jdubz/ci-python:3.10
-  cache:
-    paths:
-      - .cache/pip/
-  dependencies:
-    - build
-  before_script:
-    - python -m pip install ansible-core
-  script:
-    - ansible-galaxy collection publish --token "$GALAXY_API_TOKEN" "./${CI_PROJECT_NAMESPACE}-minio-${CI_COMMIT_REF_NAME}.tar.gz"
-  only:
-    refs:
-      - tags
+  extends: .ansible-collection:galaxy
+
+release-docs:
+  extends: .ansible-collection:release-docs
