@@ -34,10 +34,34 @@ options:
     type: str
     required: true
     description: Name of the policy to be managed.
-  data:
-    type: str
-    required: true
-    description: JSON representation of the policy contents.
+  src:
+    type: path
+    description: Local file containing the JSON policy information.
+  statements:
+    type: list
+    elements: dict
+    options:
+      effect:
+        type: str
+        choices:
+          - Allow
+          - Deny
+        required: true
+        description: Determines whether this policy allows or denies access.
+      action:
+        type: list
+        elements: str
+        required: true
+        description: >-
+          Actions allowed or denied by this policy.  See
+          L(https://min.io/docs/minio/linux/administration/identity-access-management/policy-based-access-control.html#minio-policy-actions)
+          for a list of valid policy actions.
+      resource:
+        type: list
+        elements: str
+        required: true
+        description: >-
+          List of resources to which this policy will apply.
   state:
     description:
       - Indicates the desired policy state.
@@ -46,6 +70,8 @@ options:
     default: present
     choices: [ "present", "absent" ]
     type: str
+  mutually_exclusive:
+    - ['data', 'statements']
 seealso:
   - name: mc admin policy
     description: Documentation for the B(mc admin policy) command.
@@ -56,7 +82,7 @@ extends_documentation_fragment: dubzland.minio.minio_auth
 """
 
 EXAMPLES = """
-- name: Add a policy to the Minio server
+- name: Add a policy to the Minio server via policy file
   dubzland.minio.minio_policy:
     name: fullaccess
     data: |
@@ -74,6 +100,19 @@ EXAMPLES = """
             }
         ]
       }
+    minio_url: http://localhost:9000
+    minio_access_key: myuser
+    minio_secret_key: supersekret
+    state: present
+
+
+- name: Add a policy to the Minio server via statements
+  dubzland.minio.minio_policy:
+    name: fullaccess
+    statements:
+      - effect: Allow
+        action: "s3:*"
+        resource: "arn:aws:s3:::*"
     minio_url: http://localhost:9000
     minio_access_key: myuser
     minio_secret_key: supersekret

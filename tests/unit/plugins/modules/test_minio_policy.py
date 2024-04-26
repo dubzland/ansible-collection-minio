@@ -47,7 +47,7 @@ class TestMinioPolicy(ModuleTestCase):
         client.policy_list.return_value = '{"%s": {}}' % "testing"
         mock_admin_client.return_value = client
 
-        with self.assertRaises(AnsibleExitJson) as r:
+        with self.assertRaises(AnsibleExitJson):
             set_module_args(
                 {
                     "name": "testing",
@@ -67,7 +67,7 @@ class TestMinioPolicy(ModuleTestCase):
         client.policy_list.return_value = '{"%s": {"existing": "value"}}'
         mock_admin_client.return_value = client
 
-        with self.assertRaises(AnsibleExitJson) as r:
+        with self.assertRaises(AnsibleExitJson):
             set_module_args(
                 {
                     "name": "testing",
