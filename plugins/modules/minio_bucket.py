@@ -54,10 +54,11 @@ EXAMPLES = """
   dubzland.minio.minio_bucket:
     name: testbucket
     auth:
-      url: http://localhost:9000
+      url: http://minio-server:9000
       access_key: myuser
       secret_key: supersekret
     state: present
+  delegate_to: localhost
 """
 
 from ansible_collections.dubzland.minio.plugins.module_utils.minio import (

@@ -79,41 +79,19 @@ extends_documentation_fragment: dubzland.minio.minio_auth
 """
 
 EXAMPLES = """
-- name: Add a policy to the Minio server via policy file
-  dubzland.minio.minio_policy:
-    name: fullaccess
-    data: |
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "s3:ListAllMyBuckets"
-                ],
-                "Resource": [
-                    "arn:aws:s3:::*"
-                ]
-            }
-        ]
-      }
-    minio_url: http://localhost:9000
-    minio_access_key: myuser
-    minio_secret_key: supersekret
-    state: present
-
-
-- name: Add a policy to the Minio server via statements
+- name: Add a policy to the Minio server
   dubzland.minio.minio_policy:
     name: fullaccess
     statements:
       - effect: Allow
         action: "s3:*"
         resource: "arn:aws:s3:::*"
-    minio_url: http://localhost:9000
-    minio_access_key: myuser
-    minio_secret_key: supersekret
+    auth:
+      url: http://minio-server:9000
+      access_key: myuser
+      secret_key: supersekret
     state: present
+  delegate_to: localhost
 """
 
 import json

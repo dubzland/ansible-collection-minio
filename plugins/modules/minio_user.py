@@ -71,7 +71,7 @@ EXAMPLES = """
     auth:
       access_key: minioadmin
       secret_key: minioadmin
-      url: http://minio.example.com:9000
+      url: http://minio-server:9000
     state: present
   delegate_to: localhost
 """
