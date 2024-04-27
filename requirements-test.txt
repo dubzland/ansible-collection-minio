@@ -5,7 +5,7 @@ molecule >= 6.0.2; python_version >= "3.9"
 molecule-plugins[docker] >= 23.5.0; python_version >= "3.9"
 
 molecule < 6.0.0; python_version < "3.9"
-molecule-plugins[docker] == 23.0.0; python_version < "3.9"
+molecule-plugins[docker] ==23.5.3; python_version < "3.9"
 
 pytest
 pytest-mock
