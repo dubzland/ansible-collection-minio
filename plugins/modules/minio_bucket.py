@@ -53,10 +53,9 @@ EXAMPLES = """
 - name: Add a Minio bucket
   dubzland.minio.minio_bucket:
     name: testbucket
-    auth:
-      url: http://minio-server:9000
-      access_key: myuser
-      secret_key: supersekret
+    minio_url: http://minio-server:9000
+    minio_access_key: myuser
+    minio_secret_key: supersekret
     state: present
   delegate_to: localhost
 """

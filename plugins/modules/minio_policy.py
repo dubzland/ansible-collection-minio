@@ -74,7 +74,7 @@ seealso:
     description: Documentation for the B(mc admin policy) command.
     link: https://min.io/docs/minio/linux/reference/minio-mc-admin/mc-admin-policy-create.html
 notes:
-  - The O(auth.access_key) provided must have the B(admin:CreatePolicy) permission.
+  - The O(minio_access_key) provided must have the B(admin:CreatePolicy) permission.
 extends_documentation_fragment: dubzland.minio.minio_auth
 """
 
@@ -86,10 +86,9 @@ EXAMPLES = """
       - effect: Allow
         action: "s3:*"
         resource: "arn:aws:s3:::*"
-    auth:
-      url: http://minio-server:9000
-      access_key: myuser
-      secret_key: supersekret
+    minio_url: http://minio-server:9000
+    minio_access_key: myuser
+    minio_secret_key: supersekret
     state: present
   delegate_to: localhost
 """

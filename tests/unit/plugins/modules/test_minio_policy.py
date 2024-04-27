@@ -49,11 +49,9 @@ class TestMinioPolicy(MinioAdminClientTestCase):
             {
                 "name": "testing",
                 "statements": [],
-                "auth": {
-                    "access_key": "testing",
-                    "secret_key": "supersekret",
-                    "url": "http://localhost:9000",
-                },
+                "minio_access_key": "testing",
+                "minio_secret_key": "supersekret",
+                "minio_url": "http://localhost:9000",
             }
         )
 
@@ -67,11 +65,9 @@ class TestMinioPolicy(MinioAdminClientTestCase):
             {
                 "name": "testing",
                 "statements": [],
-                "auth": {
-                    "access_key": "testing",
-                    "secret_key": "supersekret",
-                    "url": "http://localhost:9000",
-                },
+                "minio_access_key": "testing",
+                "minio_secret_key": "supersekret",
+                "minio_url": "http://localhost:9000",
             }
         )
 
@@ -86,11 +82,9 @@ class TestMinioPolicy(MinioAdminClientTestCase):
             {
                 "name": "testing",
                 "statements": [],
-                "auth": {
-                    "access_key": "testing",
-                    "secret_key": "supersekret",
-                    "url": "http://localhost:9000",
-                },
+                "minio_access_key": "testing",
+                "minio_secret_key": "supersekret",
+                "minio_url": "http://localhost:9000",
             }
         )
 
@@ -110,11 +104,9 @@ class TestMinioPolicy(MinioAdminClientTestCase):
             {
                 "name": "testing",
                 "statements": [],
-                "auth": {
-                    "access_key": "testing",
-                    "secret_key": "supersekret",
-                    "url": "http://localhost:9000",
-                },
+                "minio_access_key": "testing",
+                "minio_secret_key": "supersekret",
+                "minio_url": "http://localhost:9000",
                 "state": "absent",
             }
         )
@@ -135,11 +127,9 @@ class TestMinioPolicy(MinioAdminClientTestCase):
             {
                 "name": "testing",
                 "statements": [],
-                "auth": {
-                    "access_key": "testing",
-                    "secret_key": "supersekret",
-                    "url": "http://localhost:9000",
-                },
+                "minio_access_key": "testing",
+                "minio_secret_key": "supersekret",
+                "minio_url": "http://localhost:9000",
                 "state": "absent",
             }
         )
