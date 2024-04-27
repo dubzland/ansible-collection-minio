@@ -12,16 +12,21 @@ __metaclass__ = type
 class ModuleDocFragment(object):
     DOCUMENTATION = """
 options:
-  minio_url:
-    type: str
+  auth:
+    type: dict
     required: true
-    description: Minio Server URL.
-  minio_access_key:
-    type: str
-    required: true
-    description: Minio access key to use to authenticate with the Minio instance.
-  minio_secret_key:
-    type: str
-    required: true
-    description: Minio secret key used to connect to the Minio instance.
+    description: Connection information for the Minio instance being managed.
+    suboptions:
+      access_key:
+          type: str
+          required: true
+          description: Minio access key to use to authenticate with the Minio instance.
+      secret_key:
+          type: str
+          required: true
+          description: Minio secret key used to connect to the Minio instance.
+      url:
+          type: str
+          required: true
+          description: Minio Server URL.
 """
