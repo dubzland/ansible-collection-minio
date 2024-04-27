@@ -5,10 +5,10 @@ argument_specs:
       Installs and configures the L(Minio,https://min.io) server.
     description:
       - Downloads the Minio server binary (B(minio)).
-      - Creates a system user and group for running the B(minio) service.
-      - Adds a systemd unit for managing the B(minio) service.
-      - Creates a minimal B(minio) configuration.
-      - Initializes the B(minio) installation with an administrative user.
+      - Creates a system user and group for running the Minio service.
+      - Adds a systemd unit for managing the Minio service.
+      - Creates a minimal Minio server configuration.
+      - Initializes the Minio installation with an administrative user.
     options:
       minio_server_system_group:
         type: str
@@ -53,4 +53,4 @@ argument_specs:
         description: External URL used to access the Minio web console.
       minio_server_opts:
         type: str
-        description: Additional options to pass to the minio service.
+        description: Additional options to pass to the Minio service.
