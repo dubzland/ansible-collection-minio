@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2024-04-27
+
+### Changed
+
+- Authentication for modules is now an `auth` dict with suboptions (#12)
+- CI is now controlled by external, common templates (#11)
+- `minio_policy` now accepts a list of structured statements instead of a free-form document (#5)
+
 ## [1.0.1] - 2023-12-03
 
 ### Added
@@ -46,6 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Minio Client and Server role
 
+[unreleased]: https://git.dubzland.com/dubzland/ansible-collection-minio/-/compare/1.0.1...HEAD
+[1.1.0]: https://git.dubzland.com/dubzland/ansible-collection-minio/-/compare/1.0.1...1.1.0
 [1.0.1]: https://git.dubzland.com/dubzland/ansible-collection-minio/-/compare/1.0.0...1.0.1
 [1.0.0]: https://git.dubzland.com/dubzland/ansible-collection-minio/-/compare/0.0.2...1.0.0
 [0.0.2]: https://git.dubzland.com/dubzland/ansible-collection-minio/-/compare/0.0.1...0.0.2

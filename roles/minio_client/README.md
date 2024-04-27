@@ -26,7 +26,7 @@ Then apply the server role using the following playbook:
 ```
 ## License
 
-MIT
+See [LICENSE](LICENSE).
 
 ## Author
 
