@@ -1,4 +1,4 @@
-minio > 7.0.2, < 7.1.9; python_version < "3.7"
+minio >7.2, <7.3.0; python_version < "3.7"
 minio >= 7.1.9; python_version >= "3.7"
 
 molecule >= 6.0.2; python_version >= "3.9"
