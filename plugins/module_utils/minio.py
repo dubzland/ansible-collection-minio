@@ -9,7 +9,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import sys
-import traceback
 
 if sys.version_info < (3, 5):
     from urlparse import urlparse
@@ -19,34 +18,31 @@ else:
 from ansible.module_utils.basic import missing_required_lib
 
 
-def minio_auth_argument_spec():
-    return dict(
+try:
+    import minio
+
+    python_minio_installed = True
+except ImportError:
+    python_minio_installed = False
+
+
+def minio_argument_spec(**kwargs):
+    argument_spec = dict(
+        minio_url=dict(type="str", required=True),
         minio_access_key=dict(type="str", required=True, no_log=True),
         minio_secret_key=dict(type="str", required=True, no_log=True),
-        minio_url=dict(type="str", required=True),
     )
-
-
-MINIO_IMP_ERR = None
-try:
-    from minio import Minio, MinioAdmin
-    from minio.credentials.providers import StaticProvider
-
-    HAS_MINIO_PACKAGE = True
-except ImportError:
-    Minio = MinioAdmin = StaticProvider = None
-    MINIO_IMP_ERR = traceback.format_exc()
-    HAS_MINIO_PACKAGE = False
+    argument_spec.update(**kwargs)
+    return argument_spec
 
 
 def ensure_minio_package(module):
-    if not HAS_MINIO_PACKAGE:
+    if not python_minio_installed:
         module.fail_json(
             msg=missing_required_lib(
                 "minio",
                 url="https://min.io/docs/minio/linux/developers/python/minio-py.html",
             ),
-            exception=MINIO_IMP_ERR,
         )
 
 
@@ -55,7 +51,7 @@ def minio_client(module):
 
     o = urlparse(module.params["minio_url"])
 
-    client = Minio(
+    client = minio.Minio(
         o.netloc,
         access_key=module.params["minio_access_key"],
         secret_key=module.params["minio_secret_key"],
@@ -70,9 +66,9 @@ def minio_admin_client(module):
 
     o = urlparse(module.params["minio_url"])
 
-    client = MinioAdmin(
+    client = minio.MinioAdmin(
         o.netloc,
-        StaticProvider(
+        minio.credentials.providers.StaticProvider(
             module.params["minio_access_key"], module.params["minio_secret_key"]
         ),
         "",

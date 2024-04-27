@@ -34,18 +34,41 @@ options:
     type: str
     required: true
     description: Name of the policy to be managed.
-  data:
-    type: str
+  statements:
+    type: list
+    elements: dict
     required: true
-    description: JSON representation of the policy contents.
+    suboptions:
+      effect:
+        type: str
+        choices:
+          - Allow
+          - Deny
+        required: true
+        description: Determines whether this policy allows or denies access.
+      action:
+        type: list
+        elements: str
+        required: true
+        description: >-
+          Actions allowed or denied by this policy.  See
+          L(the minio docs, https://min.io/docs/minio/linux/administration/identity-access-management/policy-based-access-control.html#minio-policy-actions)
+          for a list of valid policy actions.
+      resource:
+        type: list
+        elements: str
+        required: true
+        description: >-
+          List of resources to which this policy will apply.
+    description: List of policy statements to include
   state:
+    type: str
+    default: present
+    choices: [ "present", "absent" ]
     description:
       - Indicates the desired policy state.
       - V(present) ensures the policy is present.
       - V(absent) ensures the policy is absent.
-    default: present
-    choices: [ "present", "absent" ]
-    type: str
 seealso:
   - name: mc admin policy
     description: Documentation for the B(mc admin policy) command.
@@ -59,25 +82,15 @@ EXAMPLES = """
 - name: Add a policy to the Minio server
   dubzland.minio.minio_policy:
     name: fullaccess
-    data: |
-      {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "s3:ListAllMyBuckets"
-                ],
-                "Resource": [
-                    "arn:aws:s3:::*"
-                ]
-            }
-        ]
-      }
-    minio_url: http://localhost:9000
+    statements:
+      - effect: Allow
+        action: "s3:*"
+        resource: "arn:aws:s3:::*"
+    minio_url: http://minio-server:9000
     minio_access_key: myuser
     minio_secret_key: supersekret
     state: present
+  delegate_to: localhost
 """
 
 import json
@@ -86,12 +99,12 @@ import tempfile
 
 from contextlib import contextmanager
 
-from ansible.module_utils.basic import AnsibleModule
-
 from ansible_collections.dubzland.minio.plugins.module_utils.minio import (
     minio_admin_client,
-    minio_auth_argument_spec,
+    minio_argument_spec,
 )
+
+from ansible.module_utils.basic import AnsibleModule
 
 
 @contextmanager
@@ -105,19 +118,22 @@ def policy_tempfile(data):
 
 
 def main():
-    argument_spec = minio_auth_argument_spec()
-    argument_spec.update(
-        dict(
-            name=dict(type="str", required=True),
-            data=dict(type="str", required=True),
-            state=dict(default="present", choices=["present", "absent"]),
-        )
+    argument_spec = minio_argument_spec(
+        name=dict(type="str", required=True),
+        statements=dict(
+            type="list",
+            elements="dict",
+            required=True,
+            options=dict(
+                effect=dict(type="str", choices=["Allow", "Deny"], required=True),
+                action=dict(type="list", elements="str", required=True),
+                resource=dict(type="list", elements="str", required=True),
+            ),
+        ),
+        state=dict(default="present", choices=["present", "absent"]),
     )
-    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
-    name = module.params["name"]
-    data = module.params["data"]
-    state = module.params["state"]
+    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     needs_policy_add = False
     changed = False
@@ -127,10 +143,31 @@ def main():
     res = client.policy_list()
     policies = json.loads(res)
 
+    state = module.params["state"]
+    name = module.params["name"]
+    statements = module.params["statements"]
+    state = module.params["state"]
+
+    data = {
+        "Version": "2012-10-17",
+        "Statement": [],
+    }
+
+    for statement in statements:
+        data["Statement"].append(
+            {
+                "Effect": statement["effect"],
+                "Action": [",".join(statement["action"])],
+                "Resource": [",".join(statement["resource"])],
+            }
+        )
+
+    json_data = json.dumps(data)
+
     if name in policies:
         if state == "present":
             # policy already exists
-            new_policy = json.loads(data)
+            new_policy = json.loads(json_data)
             current_policy = policies[name]
             if json.dumps(current_policy, sort_keys=True) != json.dumps(
                 new_policy, sort_keys=True
@@ -144,7 +181,7 @@ def main():
             needs_policy_add = True
 
     if needs_policy_add:
-        with policy_tempfile(data) as policy_file:
+        with policy_tempfile(json_data) as policy_file:
             client.policy_add(name, policy_file)
             changed = True
 

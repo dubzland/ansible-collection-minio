@@ -29,24 +29,15 @@
     - name: Add a policy
       dubzland.minio.minio_policy:
         name: testing
-        data: |
-          {
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                      "s3:*"
-                  ],
-                  "Resource": [
-                      "arn:aws:s3:::testbucket*/*"
-                  ]
-                }
-            ]
-          }
+        statements:
+          - effect: Allow
+            action:
+              - "s3:*"
+            resource:
+              - "arn:aws:s3:::testbucket*/*"
+        minio_url: "http://localhost:9000"
         minio_access_key: minioadmin
         minio_secret_key: minioadmin
-        minio_url: "http://localhost:9000"
         state: present
     - name: Add a user
       dubzland.minio.minio_user:

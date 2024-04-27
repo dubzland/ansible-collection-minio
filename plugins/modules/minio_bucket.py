@@ -53,27 +53,25 @@ EXAMPLES = """
 - name: Add a Minio bucket
   dubzland.minio.minio_bucket:
     name: testbucket
-    minio_url: http://localhost:9000
+    minio_url: http://minio-server:9000
     minio_access_key: myuser
     minio_secret_key: supersekret
     state: present
+  delegate_to: localhost
 """
 
 from ansible_collections.dubzland.minio.plugins.module_utils.minio import (
     minio_client,
-    minio_auth_argument_spec,
+    minio_argument_spec,
 )
 
 from ansible.module_utils.basic import AnsibleModule
 
 
 def main():
-    argument_spec = minio_auth_argument_spec()
-    argument_spec.update(
-        dict(
-            name=dict(type="str", required=True),
-            state=dict(default="present", choices=["present", "absent"]),
-        )
+    argument_spec = minio_argument_spec(
+        name=dict(type="str", required=True),
+        state=dict(default="present", choices=["present", "absent"]),
     )
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
