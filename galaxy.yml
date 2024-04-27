@@ -6,7 +6,7 @@ readme: README.md
 authors:
   - Josh Williams <jdubz@dubzland.com>
 description: Installs and configures the Minio Object Storage server and client.
-license_file: LICENSE
+license_file: COPYING
 tags:
   - linux
   - debian

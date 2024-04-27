@@ -41,7 +41,10 @@ Also tested against the current development version of `ansible-core`.
 
 This collection is primarily licensed and distributed as a whole under the MIT license.
 
-See [LICENSE](LICENSE) for the full text.
+See [LICENSES/MIT.txt](LICENSES/MIT.txt) for the full text.
+
+Parts of the collection are licensed under the
+[GNU General Public License v3.0 or later](LICENSES/GPL-3.0-or-later.txt).
 
 ## Author
 
