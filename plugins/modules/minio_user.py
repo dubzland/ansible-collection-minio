@@ -68,9 +68,10 @@ EXAMPLES = """
   dubzland.minio.minio_user:
     access_key: testuser
     secret_key: supersekret
-    minio_access_key: minioadmin
-    minio_secret_key: minioadmin
-    minio_url: http://minio-server:9000
+    auth:
+      access_key: minioadmin
+      secret_key: minioadmin
+      url: http://minio-server:9000
     state: present
   delegate_to: localhost
 """

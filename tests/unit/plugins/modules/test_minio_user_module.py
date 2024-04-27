@@ -45,9 +45,11 @@ class TestMinioUserModule(ModuleTestCase):
             {
                 "access_key": "testuser",
                 "secret_key": "testuser123",
-                "minio_access_key": "minioadmin",
-                "minio_secret_key": "minioadmin",
-                "minio_url": "http://localhost:9000",
+                "auth": {
+                    "access_key": "minioadmin",
+                    "secret_key": "minioadmin",
+                    "url": "http://localhost:9000",
+                },
             }
         )
 
@@ -74,9 +76,11 @@ class TestMinioUserModule(ModuleTestCase):
             {
                 "access_key": "testuser",
                 "secret_key": "testuser123",
-                "minio_access_key": "minioadmin",
-                "minio_secret_key": "minioadmin",
-                "minio_url": "http://localhost:9000",
+                "auth": {
+                    "access_key": "minioadmin",
+                    "secret_key": "minioadmin",
+                    "url": "http://localhost:9000",
+                },
             }
         )
 
@@ -103,9 +107,11 @@ class TestMinioUserModule(ModuleTestCase):
             {
                 "access_key": "testuser",
                 "secret_key": "testuser123",
-                "minio_access_key": "minioadmin",
-                "minio_secret_key": "minioadmin",
-                "minio_url": "http://localhost:9000",
+                "auth": {
+                    "access_key": "minioadmin",
+                    "secret_key": "minioadmin",
+                    "url": "http://localhost:9000",
+                },
                 "state": "absent",
             }
         )

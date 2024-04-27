@@ -28,9 +28,15 @@ except ImportError:
 
 def minio_argument_spec(**kwargs):
     argument_spec = dict(
-        minio_url=dict(type="str", required=True),
-        minio_access_key=dict(type="str", required=True, no_log=True),
-        minio_secret_key=dict(type="str", required=True, no_log=True),
+        auth=dict(
+            type="dict",
+            required=True,
+            options=dict(
+                access_key=dict(type="str", required=True, no_log=True),
+                secret_key=dict(type="str", required=True, no_log=True),
+                url=dict(type="str", required=True),
+            ),
+        )
     )
     argument_spec.update(**kwargs)
     return argument_spec
@@ -49,12 +55,13 @@ def ensure_minio_package(module):
 def minio_client(module):
     ensure_minio_package(module)
 
-    o = urlparse(module.params["minio_url"])
+    auth = module.params["auth"]
+    o = urlparse(auth["url"])
 
     client = minio.Minio(
         o.netloc,
-        access_key=module.params["minio_access_key"],
-        secret_key=module.params["minio_secret_key"],
+        access_key=auth["access_key"],
+        secret_key=auth["secret_key"],
         secure=o.scheme == "https",
     )
 
@@ -64,12 +71,13 @@ def minio_client(module):
 def minio_admin_client(module):
     ensure_minio_package(module)
 
-    o = urlparse(module.params["minio_url"])
+    auth = module.params["auth"]
+    o = urlparse(auth["url"])
 
     client = minio.MinioAdmin(
         o.netloc,
         minio.credentials.providers.StaticProvider(
-            module.params["minio_access_key"], module.params["minio_secret_key"]
+            auth["access_key"], auth["secret_key"]
         ),
         "",
         o.scheme == "https",
