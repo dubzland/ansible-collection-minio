@@ -54,9 +54,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Minio Client and Server role
 
-[unreleased]: https://git.dubzland.com/dubzland/ansible-collection-minio/-/compare/1.0.1...HEAD
-[1.1.0]: https://git.dubzland.com/dubzland/ansible-collection-minio/-/compare/1.0.1...1.1.0
-[1.0.1]: https://git.dubzland.com/dubzland/ansible-collection-minio/-/compare/1.0.0...1.0.1
-[1.0.0]: https://git.dubzland.com/dubzland/ansible-collection-minio/-/compare/0.0.2...1.0.0
-[0.0.2]: https://git.dubzland.com/dubzland/ansible-collection-minio/-/compare/0.0.1...0.0.2
-[0.0.1]: https://git.dubzland.com/dubzland/ansible-collection-minio/-/tree/0.0.1
+[unreleased]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/1.0.1...HEAD
+[1.1.0]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/1.0.1...1.1.0
+[1.0.1]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/1.0.0...1.0.1
+[1.0.0]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/0.0.2...1.0.0
+[0.0.2]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/0.0.1...0.0.2
+[0.0.1]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/tree/0.0.1

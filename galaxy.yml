@@ -16,17 +16,17 @@ tags:
 dependencies:
   "community.general": "*"
 
-repository: https://git.dubzland.com/dubzland/ansible-collection-minio
+repository: https://git.dubzland.com/dubzland/ansible-collections/minio
 
 # The URL to any online docs
 documentation: |
   https://docs.dubzland.io/ansible-collections/collections/dubzland/minio/
 
 # The URL to the homepage of the collection/project
-homepage: https://git.dubzland.com/dubzland/ansible-collection-minio
+homepage: https://git.dubzland.com/dubzland/ansible-collections/minio
 
 # The URL to the collection issue tracker
-issues: https://git.dubzland.com/dubzland/ansible-collection-minio/-/issues
+issues: https://git.dubzland.com/dubzland/ansible-collections/minio/-/issues
 build_ignore:
   - .ansible-lint
   - .cache
