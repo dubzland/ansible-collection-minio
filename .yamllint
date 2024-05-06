@@ -1,6 +1,7 @@
 ---
 extends: default
 ignore: |
+  .cache/
   .gitlab-ci.yml
   .tox/
   .venv/
