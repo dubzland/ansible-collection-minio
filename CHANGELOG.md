@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Update README badges (#16)
 - Move repository to dubzland/ansible-collections/minio (#17)
 
 ## [1.1.0] - 2024-04-27
@@ -58,9 +59,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Minio Client and Server role
 
-[unreleased]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/1.0.1...HEAD
-[1.1.0]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/1.0.1...1.1.0
-[1.0.1]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/1.0.0...1.0.1
-[1.0.0]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/0.0.2...1.0.0
-[0.0.2]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/0.0.1...0.0.2
-[0.0.1]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/tree/0.0.1
+[unreleased]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/v1.1.0...HEAD
+[1.1.0]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/v1.0.1...v1.1.0
+[1.0.1]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/v1.0.0...v1.0.1
+[1.0.0]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/v0.0.2...v1.0.0
+[0.0.2]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/compare/v0.0.1...v0.0.2
+[0.0.1]: https://git.dubzland.com/dubzland/ansible-collections/minio/-/tree/v0.0.1
