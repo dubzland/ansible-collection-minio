@@ -2,7 +2,6 @@
 include:
   - project: 'dubzland/ci-templates'
     file: 'ansible-collection.yml'
-    ref: '5-work-through-issues-with-permissions-during-builds'
 
 variables:
   DUBZLAND_COLLECTION_NAME: minio
