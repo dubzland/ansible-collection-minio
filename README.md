@@ -56,7 +56,7 @@ Parts of the collection are licensed under the
 [coverage-badge]: https://img.shields.io/gitlab/pipeline-coverage/dubzland%2Fansible-collections%2Fminio?gitlab_url=https%3A%2F%2Fgit.dubzland.com&branch=main&style=flat-square&logo=gitlab
 [coverage-url]: https://git.dubzland.com/dubzland/ansible-collections/minio/pipelines?scope=all&page=1&ref=main
 
-[galaxy-badge]: https://img.shields.io/badge/dynamic/json?style=flat-square&label=galaxy&prefix=v&url=https://galaxy.ansible.com/api/v3/collections/dubzland/minio/&query=highest_version.version
+[galaxy-badge]: https://img.shields.io/badge/dynamic/json?style=flat-square&label=galaxy&logo=ansible&prefix=v&url=https://galaxy.ansible.com/api/v3/collections/dubzland/minio/&query=highest_version.version
 [galaxy-url]: https://galaxy.ansible.com/ui/repo/published/dubzland/minio/
 [license-badge]: https://img.shields.io/gitlab/license/dubzland%2Fcontainer-images%2Fci-python?gitlab_url=https%3A%2F%2Fgit.dubzland.com&style=flat-square
 [license-url]: https://git.dubzland.com/dubzland/container-images/ci-python/-/blob/main/LICENSE
