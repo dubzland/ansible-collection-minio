@@ -158,8 +158,8 @@ def main():
         data["Statement"].append(
             {
                 "Effect": statement["effect"],
-                "Action": [",".join(statement["action"])],
-                "Resource": [",".join(statement["resource"])],
+                "Action": [statement["action"]] if type(statement["action"]) is str else statement["action"],
+                "Resource": [statement["resource"]] if type(statement["resource"]) is str else statement["resource"],
             }
         )
 
